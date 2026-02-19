@@ -10,12 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAuth from '@/hook/useauth';
+import { useRouter } from 'next/navigation';
+
 
 const LoginPage = () => {
+  const router = useRouter();
   const { GoogleSignIN } = useAuth();
     const RegWithGoogle = () => {
           GoogleSignIN()
               .then((result) => {
+                router.push('/');
                 
               }).catch((error) => {
                   if (error.code === 'auth/popup-closed-by-user') {
@@ -32,12 +36,7 @@ const LoginPage = () => {
         </div>
         
         <div className="relative z-10 flex h-full flex-col p-12 text-white">
-          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter">
-            <div className="h-8 w-8 rounded-lg bg-indigo-500 flex items-center justify-center">
-              <Zap className="h-5 w-5 fill-white" />
-            </div>
-            Nexus.ai
-          </div>
+        
 
           <div className="mt-auto">
             <motion.div
@@ -51,7 +50,7 @@ const LoginPage = () => {
               </div>
               <h1 className="text-5xl font-bold leading-tight">
                 Welcome back to <br /> 
-                <span className="text-indigo-400">your workspace.</span>
+                <span className="text-indigo-400">Your Entertenment World.</span>
               </h1>
               <p className="mt-6 text-lg text-slate-300 max-w-md">
                 Enter your credentials to access your dashboard, projects, and team settings.
