@@ -38,12 +38,15 @@ export default function RootLayout({ children }) {
                 className="w-[60px] rounded-xl"
               />
             </Link>
-            <h2 className="text-xl text-white font-semibold">MuvieMatrix</h2>
+            <h2 className="text-xl text-white font-semibold">MovieMatrix</h2>
           </div>
 
           <div className="space-x-5">
             <Link className="p-2 rounded-xl bg-amber-400" href="/movies">
               Movies
+            </Link>
+            <Link className="p-2 rounded-xl bg-amber-400" href="/profile">
+              My Profile
             </Link>
             <Link className="p-2 rounded-xl bg-amber-400" href="/reviews">
               Reviews
