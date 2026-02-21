@@ -2,8 +2,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/Authprovider/AuthProvider";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,38 +27,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Header */}
-        <header className="px-5 py-2 items-center flex justify-between gap-5 bg-stone-800">
-          <div className="flex gap-x-4 items-center">
-            <Link href="/">
-              <img
-                width={60}
-                height={20}
-                src="/logo.png"
-                alt="Logo"
-                className="w-[60px] rounded-xl"
-              />
-            </Link>
-            <h2 className="text-xl text-white font-semibold">MovieMatrix</h2>
-          </div>
-
-          <div className="space-x-5">
-            <Link className="p-2 rounded-xl bg-amber-400" href="/movies">
-              Movies
-            </Link>
-            <Link className="p-2 rounded-xl bg-amber-400" href="/profile">
-              My Profile
-            </Link>
-            <Link className="p-2 rounded-xl bg-amber-400" href="/reviews">
-              Reviews
-            </Link>
-            <Link className="p-2 rounded-xl bg-amber-400" href="/register">
-              Register
-            </Link>
-            <Link className="p-2 rounded-xl bg-amber-400" href="/login">
-              Login
-            </Link>
-          </div>
-        </header>
+        <Navbar></Navbar>
 
         {/* Main Content */}
 

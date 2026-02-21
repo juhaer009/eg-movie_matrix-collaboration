@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+
 
 const movies = [
   {
@@ -31,7 +31,7 @@ const movies = [
 
 export default function TrendingSection() {
   return (
-    <section className="bg-black py-16 px-6">
+    <section className=" py-16 px-6">
       <h2 className="text-4xl font-bold text-white mb-10 text-center">
         🔥 Trending Movies
       </h2>
