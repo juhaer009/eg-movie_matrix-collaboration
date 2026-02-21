@@ -1,23 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
+import logo from '../../public/logo.jpg'
 
 const Footer = () => {
   return (
-    <footer className="bg-stone-900 text-gray-300 pt-12 pb-6 border-t border-stone-700">
+    <footer className="bg-gradient-to-br from-[#140f1f] via-[#1f1633] to-[#2a1f4a] text-gray-300 pt-12 pb-6 border-t border-purple-800">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
         
         {/* Logo Section */}
         <div>
           <div className="flex items-center gap-3 mb-4">
             <Image
-              src="/logo.png"
+              src={logo}
               width={50}
               height={50}
               alt="MovieMatrix Logo"
               className="rounded-lg"
             />
             <h2 className="text-xl font-bold text-white tracking-wide">
-              MUVIEMATRIX
+              MovieMatrix
             </h2>
           </div>
           <p className="text-sm text-gray-400">

@@ -1,57 +1,99 @@
 "use client";
-import Link from "next/link";
-import { motion } from "framer-motion";
 
-export default function Banner() {
+import React from "react";
+import Image from "next/image";
+import banner from "../../public/banner.jpg";
+
+const Banner = () => {
   return (
-    <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white">
-      
-      {/* Background Glow Effect */}
-      <div className="absolute w-[500px] h-[500px] bg-purple-600 rounded-full blur-[150px] opacity-30 top-[-100px] left-[-100px]"></div>
-      <div className="absolute w-[400px] h-[400px] bg-pink-500 rounded-full blur-[120px] opacity-30 bottom-[-100px] right-[-100px]"></div>
+    <section className="relative w-full h-[90vh] flex items-center justify-center text-center overflow-hidden bg-[#000]">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <Image
+          src={banner}
+          alt="Movie Background"
+          fill
+          priority
+          className="object-cover"
+        />
 
-      {/* Content */}
-      <div className="z-10 text-center px-6">
-        <motion.h1
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-pink-400 to-purple-400 text-transparent bg-clip-text"
-        >
-          Welcome to MovieMatrix 🎬
-        </motion.h1>
+        <div className="absolute inset-0 bg-black/60"></div>
+      </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto"
-        >
-          Discover trending movies, explore ratings, and dive into cinematic
-          experiences like never before.
-        </motion.p>
+      <div className="relative z-20 px-6 max-w-4xl">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight">
+          Unlimited movies, TV shows, and more
+        </h1>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-8 flex justify-center gap-6"
-        >
-          <Link
-            href="/movies"
-            className="px-8 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 hover:scale-105 transition transform duration-300 shadow-lg"
+        <p className="mt-6 text-lg md:text-xl text-gray-300">
+          Starts at USD 2.99. Cancel anytime.
+        </p>
+
+        <button className="mt-8 px-8 py-4 bg-red-600 hover:bg-red-700 transition duration-300 text-white text-lg font-semibold rounded-lg shadow-lg">
+          Get Started &rarr;
+        </button>
+      </div>
+
+      <div className="absolute bottom-[-10px] left-0 w-full overflow-hidden leading-[0] z-30">
+        <div className="relative w-[160%] left-[-30%] h-[120px]">
+          <div className="absolute top-[48px] w-full h-full bg-[#000]"></div>
+
+          <svg
+            viewBox="0 0 500 60"
+            preserveAspectRatio="none"
+            className="relative block w-full h-[60px]"
           >
-            Explore Movies
-          </Link>
+            <defs>
+              <filter
+                id="purple-glow"
+                x="-20%"
+                y="-20%"
+                width="140%"
+                height="140%"
+              >
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
 
-          <Link
-            href="/trending"
-            className="px-8 py-3 rounded-full border border-gray-400 hover:bg-white hover:text-black transition duration-300"
-          >
-            Trending Now
-          </Link>
-        </motion.div>
+              <linearGradient
+                id="arc-gradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
+                <stop offset="0%" stopColor="transparent" />
+                <stop offset="30%" stopColor="#e50914" />
+                <stop offset="50%" stopColor="#ff1f2d" />{" "}
+                {/* Middle is brighter/bolder */}
+                <stop offset="70%" stopColor="#e50914" />
+                <stop offset="100%" stopColor="transparent" />
+              </linearGradient>
+            </defs>
+
+            <path
+              d="M0,60 Q250,0 500,60"
+              fill="none"
+              stroke="#9333ea"
+              strokeWidth="6"
+              className="opacity-40 blur-md"
+            />
+
+            <path
+              d="M0,60 Q250,10 500,60"
+              fill="none"
+              stroke="url(#arc-gradient)"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              filter="url(#purple-glow)"
+            />
+
+            <path d="M0,60 Q250,10 500,60 L500,100 L0,100 Z" fill="#000" />
+          </svg>
+        </div>
       </div>
     </section>
   );
-}
+};
+
+export default Banner;
