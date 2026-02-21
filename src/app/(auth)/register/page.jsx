@@ -10,14 +10,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAuth from '@/hook/useauth';
+import { useRouter } from 'next/navigation';
 
 
 const RegisterPage = () => {
   const { GoogleSignIN } = useAuth();
+  const router = useRouter();
   const RegWithGoogle = () => {
         GoogleSignIN()
             .then((result) => {
-              
+              console.log('ton');
+              router.push('/');
             }).catch((error) => {
                 if (error.code === 'auth/popup-closed-by-user') {
                     window.location.reload();
@@ -32,12 +35,7 @@ const RegisterPage = () => {
         </div>
         
         <div className="relative z-10 flex h-full flex-col p-12 text-white">
-          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter">
-            <div className="h-8 w-8 rounded-lg bg-indigo-500 flex items-center justify-center">
-              <Zap className="h-5 w-5 fill-white" />
-            </div>
-            Nexus.ai
-          </div>
+          
 
           <div className="mt-auto">
             <motion.div
