@@ -1,76 +1,148 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+
+import { useRouter } from "next/navigation";
+import { auth } from "@/firbase";
+
 export default function ProfilePage() {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  const handleFollow = () => setIsFollowing(!isFollowing);
+
+  const buttonGradient =
+    "linear-gradient(90deg, var(--chart-5), var(--chart-4))";
+
+  // 🔐 Protect Route + Get User
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push("/login");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  // 🚪 Logout
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/login");
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-white">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-base-200 flex justify-center items-center p-6">
+    <div className="min-h-screen p-6 flex justify-center items-center text-white bg-background">
+      <div className="max-w-4xl w-full">
 
-      <div className="max-w-4xl w-full grid md:grid-cols-2 gap-6">
+        <div className="backdrop-blur-xl bg-gradient-to-br from-pink-500 to-pink-700 border border-white/20 rounded-3xl p-10 shadow-2xl flex flex-col items-center text-center transition-all duration-500 hover:scale-[1.02]">
 
-        {/* LEFT CARD */}
-        <div className="card bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-xl">
-
-          <div className="card-body text-center">
-
-            <div className="avatar mx-auto">
-              <div className="w-24 rounded-full ring ring-white ring-offset-2">
-                <img src="https://i.pravatar.cc/200" />
-              </div>
+          {/* Avatar */}
+          <div className="relative">
+            <div className="w-32 h-32 rounded-full overflow-hidden ring-4 ring-cyan-400 shadow-[0_0_25px_rgba(0,255,255,0.6)]">
+              <img
+                src={user.photoURL || "https://i.pravatar.cc/200"}
+                alt="Profile Avatar"
+                className="w-full h-full object-cover"
+              />
             </div>
+            <span className="absolute bottom-2 right-2 w-5 h-5 bg-green-400 border-2 border-white rounded-full animate-pulse"></span>
+          </div>
 
-            <h2 className="text-2xl font-bold mt-2">Rehena</h2>
-            <p className="opacity-80">rehena@email.com</p>
+          {/* Dynamic Name & Email */}
+          <h1 className="text-3xl font-bold mt-5 tracking-wide">
+            {user.displayName || "User"}
+          </h1>
+          <p className="opacity-80 mt-1">{user.email}</p>
 
-            <div className="badge badge-outline mt-2 text-white">
-              AI Taste: Cine Explorer
-            </div>
+          {/* AI Badge */}
+          <div className="mt-3 px-4 py-1 rounded-full bg-[linear-gradient(90deg, var(--chart-5), var(--chart-4))] text-sm font-medium shadow-md">
+            🤖 AI Taste: Cine Explorer
+          </div>
 
-            <div className="divider divider-neutral"></div>
+          {/* Top Buttons */}
+          <div className="flex gap-6 mt-6 flex-wrap justify-center">
 
-            <button className="btn btn-outline text-white">Edit Profile</button>
-            <button className="btn btn-error btn-outline mt-2">Logout</button>
+            {/* Follow Button */}
+            <button
+              onClick={handleFollow}
+              className="relative px-8 py-3 rounded-full font-semibold overflow-hidden transition-all duration-500 group text-white shadow-lg hover:scale-105"
+              style={{ background: buttonGradient }}
+            >
+              <span className="relative z-10">
+                {isFollowing ? "✓ Following" : "✨ Follow"}
+              </span>
+              <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition duration-500"></span>
+            </button>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="relative px-8 py-3 rounded-full font-semibold overflow-hidden transition-all duration-500 group text-white shadow-lg hover:scale-105"
+              style={{ background: buttonGradient }}
+            >
+              <span className="relative z-10">⏻ Logout</span>
+              <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition duration-500"></span>
+            </button>
 
           </div>
-        </div>
 
-        {/* RIGHT CARD */}
-        <div className="card bg-base-100 shadow-xl">
+          {/* Stats Buttons */}
+          <div className="flex flex-wrap justify-center gap-6 mt-10">
 
-          <div className="card-body">
+            <button
+              className="relative px-8 py-3 rounded-full font-semibold overflow-hidden transition-all duration-500 group text-white shadow-lg hover:scale-105"
+              style={{ background: buttonGradient }}
+            >
+              <span className="relative z-10">🎬 12 Watchlist</span>
+              <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition duration-500"></span>
+            </button>
 
-            <div className="grid grid-cols-3 gap-3 text-center">
+            <button
+              className="relative px-8 py-3 rounded-full font-semibold overflow-hidden transition-all duration-500 group text-white shadow-lg hover:scale-105"
+              style={{ background: buttonGradient }}
+            >
+              <span className="relative z-10">👀 34 Watched</span>
+              <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition duration-500"></span>
+            </button>
 
-              <div className="bg-base-200 rounded-lg p-3">
-                <p className="text-xl font-bold">12</p>
-                <span>Watchlist</span>
-              </div>
-
-              <div className="bg-base-200 rounded-lg p-3">
-                <p className="text-xl font-bold">34</p>
-                <span>Watched</span>
-              </div>
-
-              <div className="bg-base-200 rounded-lg p-3">
-                <p className="text-xl font-bold text-success">92%</p>
-                <span>AI Match</span>
-              </div>
-
-            </div>
-
-            <div className="divider"></div>
-
-            <h3 className="font-semibold">Favorite Genres</h3>
-
-            <div className="flex flex-wrap gap-2">
-              <span className="badge badge-outline">Sci-Fi</span>
-              <span className="badge badge-outline">Drama</span>
-              <span className="badge badge-outline">Action</span>
-              <span className="badge badge-outline">Thriller</span>
-            </div>
+            <button
+              className="relative px-8 py-3 rounded-full font-semibold overflow-hidden transition-all duration-500 group text-white shadow-lg hover:scale-105"
+              style={{ background: buttonGradient }}
+            >
+              <span className="relative z-10">🤖 92% AI Match</span>
+              <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition duration-500"></span>
+            </button>
 
           </div>
-        </div>
 
+          {/* Favorite Genres */}
+          <h3 className="mt-8 font-semibold text-lg">Favorite Genres</h3>
+          <div className="flex flex-wrap gap-3 mt-3 justify-center">
+            {["Sci-Fi", "Drama", "Action", "Thriller"].map((genre) => (
+              <span
+                key={genre}
+                className="px-4 py-1 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 transition cursor-pointer"
+              >
+                {genre}
+              </span>
+            ))}
+          </div>
+
+        </div>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Movies", path: "/movies" },
     { name: "Reviews", path: "/reviews" },
+    {name:'profile',path:'/profile'},
     { name: "Register", path: "/register" },
     { name: "Login", path: "/login" },
   ];
