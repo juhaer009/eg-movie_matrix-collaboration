@@ -36,7 +36,7 @@ export default function MovieCard({ movie }) {
             {movie.price}
           </span>
 
-          <MovieCardBtn />
+          <MovieCardBtn id={movie.id} />  
         </div>
       </div>
     </div>

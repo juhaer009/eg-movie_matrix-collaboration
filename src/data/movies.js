@@ -1,8 +1,4 @@
-import MovieCard from "@/components/ui/MovieCard";
-import React from "react";
-
-const Movies = () => {
-  const movies = [
+export const movies = [
     {
       id:"01",
       title: "Shadow Protocol",
@@ -175,17 +171,3 @@ const Movies = () => {
         "https://www.engineersgarage.com/wp-content/uploads/2019/07/time-loop.jpg",
     },
   ];
-
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6 text-center">All Movies</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
-        {movies.map((movie, index) => (
-          <MovieCard key={index} movie={movie}></MovieCard>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default Movies;
