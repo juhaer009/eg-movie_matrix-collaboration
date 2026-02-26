@@ -9,6 +9,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const navLinks = [
+    { name: "Add Movies", path: "/addMovies" },
     { name: "Movies", path: "/movies" },
     { name: "Reviews", path: "/reviews" },
     {name:'profile',path:'/profile'},
