@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import { useRouter } from "next/navigation";
-import { auth } from "@/firbase";
+import { auth } from "@/Firebase/Firebase.init";
+// import { auth } from "@/firbase";
 
 export default function ProfilePage() {
   const [isFollowing, setIsFollowing] = useState(false);

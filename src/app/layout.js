@@ -4,6 +4,10 @@ import AuthProvider from "@/Authprovider/AuthProvider";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import ReduxProvider from "@/redux/ReduxProvider";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store/store";
+import CurrentUser from "@/components/CurrentUser/CurrentUser";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +35,14 @@ export default function RootLayout({ children }) {
 
         {/* Main Content */}
 
-        <main className="flex-grow">
+        {/* <main className="flex-grow">
           <AuthProvider>{children}</AuthProvider>
+        </main> */}
+
+        <main className="flex-grow">
+          <ReduxProvider>
+            <CurrentUser>{children}</CurrentUser>
+          </ReduxProvider>
         </main>
 
         <Footer></Footer>
