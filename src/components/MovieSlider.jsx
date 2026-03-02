@@ -35,11 +35,10 @@ export default function MovieSlider() {
       {movies.map((img, index) => (
         <div
           key={index}
-          className={`absolute w-full h-full transition-opacity duration-1000 ${
-            index === current ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute w-full h-full transition-opacity duration-1000 ${index === current ? "opacity-100" : "opacity-0"
+            }`}
         >
-          <img
+          <Image
             src={`${img}?auto=format&fit=crop&w=1600&q=80`}
             alt="Movie Poster"
             fill

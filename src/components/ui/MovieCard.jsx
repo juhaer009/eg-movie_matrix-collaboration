@@ -1,3 +1,4 @@
+import Image from "next/image";
 import MovieCardBtn from "./MovieCardBtn";
 
 export default function MovieCard({ movie }) {
@@ -5,7 +6,7 @@ export default function MovieCard({ movie }) {
     <div className="group relative w-80 rounded-2xl overflow-hidden bg-zinc-900 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
       {/* Image Section */}
       <div className="relative h-56 w-full overflow-hidden">
-        <img
+        <Image
           src={movie.image}
           alt={movie.title}
           fill
@@ -36,7 +37,7 @@ export default function MovieCard({ movie }) {
             {movie.price}
           </span>
 
-          <MovieCardBtn />
+          <MovieCardBtn id={movie.id} />
         </div>
       </div>
     </div>
