@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAuth from '@/hook/useauth';
 import { useRouter } from 'next/navigation';
+import { getRoleFromToken } from '@/lib/auth';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -54,8 +55,16 @@ const LoginPage = () => {
       const result = await response.json();
       if (result.token) {
         localStorage.setItem("auth_token", result.token);
+
+        const role = getRoleFromToken(result.token);
+        if (role === 'admin') {
+          router.push("/admin");
+        } else {
+          router.push("/dashboard");
+        }
+      } else {
+        router.push("/");
       }
-      router.push("/");
     } catch (err) {
       console.error(err);
       setError("An error occurred during login. Please try again.");
