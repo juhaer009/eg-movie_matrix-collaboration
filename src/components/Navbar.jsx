@@ -23,6 +23,7 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
+    { name: "Add Movies", path: "/addMovies" },
     { name: "Movies", path: "/movies" },
     { name: "Reviews", path: "/reviews" },
   ];
