@@ -1,0 +1,31 @@
+"use client";
+
+import { useState } from "react";
+import Sidebar from "@/components/admin/Sidebar";
+import AdminNavbar from "@/components/admin/AdminNavbar";
+
+export default function AdminLayout({ children }) {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  return (
+    <div className="min-h-screen bg-zinc-950 text-white selection:bg-netflix-red selection:text-white flex overflow-hidden">
+      {/* Sidebar - Fixed/Overlay */}
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-h-screen relative overflow-hidden transition-all duration-300 lg:pl-64">
+        {/* Navbar - Fixed */}
+        <AdminNavbar onMenuClick={toggleSidebar} />
+
+        {/* Dynamic Content */}
+        <main className="flex-1 mt-16 p-4 md:p-8 overflow-y-auto">
+          <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
