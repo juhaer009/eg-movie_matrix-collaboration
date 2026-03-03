@@ -128,6 +128,7 @@ const authSlice = createSlice({
     //     state.error = action.payload;
     //   });
   },
+  
 });
 
 export const { setAuthuser, clearError } = authSlice.actions;

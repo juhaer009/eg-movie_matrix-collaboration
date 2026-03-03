@@ -22,12 +22,14 @@ import {
   googleLogin,
   registerUser,
 } from "@/redux/feature/authSlice";
+import { useRouter } from "next/navigation";
+import { FaRegEye, FaRegEyeSlash, } from "react-icons/fa";
+// import { useRouter } from "next/router";
 // import { setScale } from "recharts/types/state/layoutSlice";
 
 const RegisterPage = () => {
   const isChecked = useSelector((state) => state.checked.ischecked);
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
   const { error, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [passworderror, setPassworderror] = useState("");
@@ -37,38 +39,126 @@ const RegisterPage = () => {
   const [checkboxError, setCheckboxError] = useState("");
   const [name, setName] = useState(" ");
   const [email, setEmail] = useState(" ");
+  const router = useRouter();
+  const [showPassword , setShowPassword]=useState(false)
+  
+
+  // const handleGoogleLogin = async () => {
+  //   const result = await dispatch(googleLogin());
+  //   console.log(result);
+
+  //   if (googleLogin.fulfilled.match(result)) {
+  //     const displayName = result.payload.displayName;
+  //     const email = result.payload.email;
+  //     setName(displayName);
+  //     setEmail(email);
+  //   }
+  //   if (googleLogin.rejected.match(result)) {
+  //     console.log(result.payload);
+  //     alert(result.payload);
+  //   }
+
+  //   // now you need to push user info form here .
+
+  // };
 
   const handleGoogleLogin = async () => {
-    console.log("button is Clicked");
+    if (loading) return; // prevent multiple clicks
+
     const result = await dispatch(googleLogin());
-    console.log(result);
 
     if (googleLogin.fulfilled.match(result)) {
-      const displayName = result.payload.displayName;
-      const email = result.payload.email;
-      setName(displayName);
-      setEmail(email);
+      router.push("/dashboard");
     }
+
     if (googleLogin.rejected.match(result)) {
-      console.log(result.payload);
-      alert(result.payload);
+      if (result.payload !== "auth/cancelled-popup-request") {
+        alert(result.payload);
+      }
     }
-
-    // now you need to push user info form here . 
-
-
-
   };
 
   // console.log(name);
   // console.log(email);
 
+  // const handleRegisterForm = async (e) => {
+  //   e.preventDefault();
+  //   const first_name = e.target.first_name.value;
+  //   const last_name = e.target.last_name.value;
+  //   const email = e.target.email.value;
+  //   const password = e.target.password.value;
+  //   const ischecked = isChecked;
+
+  //   const passwordRegex = /^.{6,}$/;
+  //   const regex = /^(?=.*[a-z])(?=.*[A-Z]).+$/;
+
+  //   let hasError = false;
+
+  //   // Validate first name
+  //   if (!first_name) {
+  //     setFirstNameError("First name is required");
+  //     hasError = true;
+  //   } else {
+  //     setFirstNameError("");
+  //   }
+
+  //   // Validate last name
+  //   if (!last_name) {
+  //     setLastNameError("Last name is required");
+  //     hasError = true;
+  //   } else {
+  //     setLastNameError("");
+  //   }
+
+  //   // Validate email
+  //   if (!email) {
+  //     setEmailError("Email is required");
+  //     hasError = true;
+  //   } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+  //     setEmailError("Email is not valid");
+  //     hasError = true;
+  //   } else {
+  //     setEmailError("");
+  //   }
+
+  //   if (!passwordRegex.test(password)) {
+  //     setPassworderror("password must be 6 character long");
+  //     return;
+  //   }
+
+  //   if (!regex.test(password)) {
+  //     setPassworderror("password must be one upercase and one lowercase");
+  //     return;
+  //   }
+  //   setPassworderror("");
+
+  //   if (!isChecked) {
+  //     setCheckboxError("You must agree to receive updates");
+  //     hasError = true;
+  //   } else {
+  //     setCheckboxError("");
+  //   }
+
+  //   const result = await dispatch(registerUser({ email, password }));
+  //   // console.log(result);
+
+  //   if (registerUser.rejected.match(result)) {
+  //     return;
+  //   }
+  //   if (registerUser.fulfilled.match(result)) {
+  //     router.push("/dashboard");
+  //   }
+
+  //   // now you need to post user info in the database
+  // };
+
   const handleRegisterForm = async (e) => {
     e.preventDefault();
-    const first_name = e.target.first_name.value;
-    const last_name = e.target.last_name.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+
+    const first_name = e.target.first_name.value.trim();
+    const last_name = e.target.last_name.value.trim();
+    const email = e.target.email.value.trim();
+    const password = e.target.password.value.trim();
     const ischecked = isChecked;
 
     const passwordRegex = /^.{6,}$/;
@@ -76,7 +166,7 @@ const RegisterPage = () => {
 
     let hasError = false;
 
-    // Validate first name
+    // First Name Validation
     if (!first_name) {
       setFirstNameError("First name is required");
       hasError = true;
@@ -84,7 +174,7 @@ const RegisterPage = () => {
       setFirstNameError("");
     }
 
-    // Validate last name
+    // Last Name Validation
     if (!last_name) {
       setLastNameError("Last name is required");
       hasError = true;
@@ -92,7 +182,7 @@ const RegisterPage = () => {
       setLastNameError("");
     }
 
-    // Validate email
+    // Email Validation
     if (!email) {
       setEmailError("Email is required");
       hasError = true;
@@ -103,34 +193,46 @@ const RegisterPage = () => {
       setEmailError("");
     }
 
-    if (!passwordRegex.test(password)) {
-      setPassworderror("password must be 6 character long");
-      return;
+    // Password Validation
+    if (!password) {
+      setPassworderror("Password is required");
+      hasError = true;
+    } else if (!passwordRegex.test(password)) {
+      setPassworderror("Password must be at least 6 characters long");
+      hasError = true;
+    } else if (!regex.test(password)) {
+      setPassworderror(
+        "Password must contain one uppercase and one lowercase letter",
+      );
+      hasError = true;
+    } else {
+      setPassworderror("");
     }
 
-    if (!regex.test(password)) {
-      setPassworderror("password must be one upercase and one lowercase");
-      return;
-    }
-    setPassworderror("");
-
-    if (!isChecked) {
+    // Checkbox Validation
+    if (!ischecked) {
       setCheckboxError("You must agree to receive updates");
       hasError = true;
     } else {
       setCheckboxError("");
     }
 
+    // 🚨 IMPORTANT PART
+    if (hasError) {
+      return; // STOP form submission if any error exists
+    }
+
+    // If no error, then register
     const result = await dispatch(registerUser({ email, password }));
-    // console.log(result);
 
     if (registerUser.rejected.match(result)) {
       return;
     }
-    
-    // now you need to post user info in the database 
-  };
 
+    if (registerUser.fulfilled.match(result)) {
+      router.push("/dashboard");
+    }
+  };
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -281,19 +383,21 @@ const RegisterPage = () => {
                   )}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 relative">
                   <Label className="text-slate-500" htmlFor="password">
                     Password
                   </Label>
                   <Input
                     name="password"
-                    type="password"
+                    type={`${showPassword?"text":"password"}`}
                     placeholder="Enter password"
                     className="text-slate-500 placeholder:text-slate-400 focus-visible:ring-indigo-500"
                   />
-                  {/* <p className="text-[10px] text-slate-400 italic">
-                    Must be at least 8 characters.
-                  </p> */}
+                  <div 
+                  onClick={()=>setShowPassword(!showPassword)}
+                  className="absolute top-9 right-10">
+                   {showPassword?  <FaRegEyeSlash />:<FaRegEye />}
+                  </div>
                 </div>
                 {passworderror && (
                   <p className="text-red-500 text-xs mt-1">{passworderror}</p>
@@ -361,40 +465,44 @@ const RegisterPage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="w-full">
                 <Button
                   type="button"
+                  disabled={loading}
                   onClick={handleGoogleLogin}
-                  variant="outline"
-                  className="h-12 border-slate-200 hover:bg-slate-200"
+                  className="group relative h-12 w-full overflow-hidden rounded-xl border border-slate-300 bg-white text-slate-700 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 disabled:opacity-70"
                 >
-                  <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-                    <path
-                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                      fill="#4285F4"
-                    />
-                    <path
-                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                      fill="#34A853"
-                    />
-                    <path
-                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                      fill="#FBBC05"
-                    />
-                    <path
-                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                      fill="#EA4335"
-                    />
-                  </svg>
-                  Google
-                </Button>
+                  <span className="absolute inset-0 bg-gradient-to-r from-red-50 via-blue-50 to-yellow-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-                <Button
-                  variant="outline"
-                  className="h-12 border-slate-200 hover:bg-slate-200"
-                >
-                  <Github className="mr-2 h-4 w-4" />
-                  GitHub
+                  <span className="relative flex items-center justify-center gap-3 font-medium">
+                    <svg className="h-5 w-5" viewBox="0 0 24 24">
+                      <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 
+        1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 
+        3.28-4.74 3.28-8.09z"
+                        fill="#4285F4"
+                      />
+                      <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 
+        1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 
+        20.53 7.7 23 12 23z"
+                        fill="#34A853"
+                      />
+                      <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 
+        8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        fill="#FBBC05"
+                      />
+                      <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 
+        2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 
+        2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335"
+                      />
+                    </svg>
+
+                    {loading ? "Signing in..." : "Continue with Google"}
+                  </span>
                 </Button>
               </div>
             </div>
