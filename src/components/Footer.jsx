@@ -14,6 +14,9 @@ const Footer = () => {
   }
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6b30f8301dead397608ecab0d1b62de1d08b6568
     <footer className="bg-gradient-to-br from-[#140f1f] via-[#1f1633] to-[#2a1f4a] text-gray-300 pt-12 pb-6 border-t border-purple-800">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
 
@@ -30,6 +33,7 @@ const Footer = () => {
             <h2 className="text-xl font-bold text-white tracking-wide">
               MovieMatrix
             </h2>
+<<<<<<< HEAD
 =======
     <footer className="relative backdrop-blur-xl bg-black/40 border-t border-white/10 text-gray-300 pt-16 pb-8 overflow-hidden">
       {/* Decorative Background Elements */}
@@ -75,6 +79,8 @@ const Footer = () => {
               ))}
             </div>
 >>>>>>> a67107fed105704c3c8638e705c9ff46f7059991
+=======
+>>>>>>> 6b30f8301dead397608ecab0d1b62de1d08b6568
           </div>
 
           {/* Quick Links */}
