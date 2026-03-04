@@ -1,8 +1,19 @@
 "use client";
 
 import { Bell, Search, User, ChevronDown, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getRoleFromToken } from "@/lib/auth";
 
 export default function AdminNavbar({ onMenuClick }) {
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("auth_token");
+        if (token) {
+            setRole(getRoleFromToken(token));
+        }
+    }, []);
+
     return (
         <header className="h-16 border-b border-zinc-800 bg-zinc-950 px-4 md:px-8 flex items-center justify-between fixed top-0 right-0 left-0 lg:left-64 z-40">
             <div className="flex items-center gap-4 flex-1">
@@ -33,8 +44,12 @@ export default function AdminNavbar({ onMenuClick }) {
 
                 <div className="flex items-center gap-3 pl-3 md:pl-6 border-l border-zinc-800 cursor-pointer group">
                     <div className="text-right hidden sm:block">
-                        <p className="text-sm font-medium text-white group-hover:text-netflix-red transition-colors whitespace-nowrap">Admin User</p>
-                        <p className="text-xs text-zinc-500">Super Admin</p>
+                        <p className="text-sm font-medium text-white group-hover:text-netflix-red transition-colors whitespace-nowrap">
+                            {role === "admin" ? "Admin User" : "Member"}
+                        </p>
+                        <p className="text-xs text-zinc-500 uppercase tracking-wider">
+                            {role === "admin" ? "Super Admin" : "User Account"}
+                        </p>
                     </div>
                     <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden group-hover:border-netflix-red/50 transition-all">
                         <User className="w-5 h-5 text-zinc-500" />
@@ -45,3 +60,4 @@ export default function AdminNavbar({ onMenuClick }) {
         </header>
     );
 }
+
