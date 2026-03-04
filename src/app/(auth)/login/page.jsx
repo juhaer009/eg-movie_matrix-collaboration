@@ -15,7 +15,7 @@ import { getRoleFromToken } from '@/lib/auth';
 
 const LoginPage = () => {
   const router = useRouter();
-  const { GoogleSignIN } = useAuth();
+  const { user, signInUser, GoogleSignIN } = useAuth(); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -29,50 +29,59 @@ const LoginPage = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+  try {
+    // 🔐 Firebase Login
+    const firebaseResult = await signInUser(
+      formData.email,
+      formData.password
+    );
 
-      if (!response.ok) {
-        const result = await response.json().catch(() => ({}));
-        throw new Error(result.message || "Invalid email or password");
-      }
+    // 🔑 Get Firebase Token
+    const firebaseToken = await firebaseResult.user.getIdToken();
 
-      const result = await response.json();
-      if (result.token) {
-        localStorage.setItem("auth_token", result.token);
+    // 🌐 Send Token To Backend (Not password again)
+    const response = await fetch("http://localhost:5000/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${firebaseToken}`,
+      },
+      credentials: "include",
+    });
 
-        const role = getRoleFromToken(result.token);
-        if (role === 'admin') {
-          router.push("/admin");
-        } else {
-          router.push("/dashboard");
-        }
-      } else {
-        router.push("/");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("An error occurred during login. Please try again.");
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Authentication failed");
     }
-  };
 
+    const data = await response.json();
+
+    if (data.token) {
+      localStorage.setItem("auth_token", data.token);
+
+      const role = getRoleFromToken(data.token);
+
+      if (role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
+    } else {
+      router.push("/");
+    }
+
+  } catch (err) {
+    console.error("Login Error:", err);
+    setError(err.message || "Something went wrong. Try again.");
+  } finally {
+    setLoading(false);
+  }
+};
   const RegWithGoogle = () => {
     GoogleSignIN()
       .then((result) => {

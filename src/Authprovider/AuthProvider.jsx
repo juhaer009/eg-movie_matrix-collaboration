@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from '../Authcontex/AuthContext';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { auth } from '../firbase';
 
 const AuthProvider = ({ children }) => {
@@ -28,11 +28,11 @@ const AuthProvider = ({ children }) => {
 
     const Updateprofile = (Profile) => {
         return updateProfile(auth.currentUser, Profile)
-            .then(() => {
-            })
-            .catch((error) => {
-            })
-    }
+    };
+          const forgotPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  }
+
 
 
     useEffect(() => {
@@ -54,7 +54,8 @@ const AuthProvider = ({ children }) => {
         setLoading,
         registerUser,
         signInUser,
-        Updateprofile
+        Updateprofile,
+        forgotPassword
 
     }
     return (
