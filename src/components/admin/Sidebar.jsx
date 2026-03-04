@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
     LayoutDashboard,
     Film,
@@ -11,12 +12,14 @@ import {
     Star,
     BarChart3,
     Settings,
-    LogOut
+    LogOut,
+    User
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getRoleFromToken } from "@/lib/auth";
 
-const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
+const adminItems = [
+    { icon: LayoutDashboard, label: "Admin Dashboard", href: "/admin" },
     { icon: Film, label: "Movies", href: "/admin/movies" },
     { icon: PlusCircle, label: "Add Movie", href: "/admin/add-movie" },
     { icon: Users, label: "Users", href: "/admin/users" },
@@ -26,8 +29,31 @@ const menuItems = [
     { icon: Settings, label: "Settings", href: "/admin/settings" },
 ];
 
+const userItems = [
+    { icon: LayoutDashboard, label: "My Dashboard", href: "/dashboard" },
+    { icon: Bookmark, label: "Watchlist", href: "/dashboard/watchlist" },
+    { icon: Star, label: "My Ratings", href: "/dashboard/ratings" },
+    { icon: User, label: "Profile", href: "/profile" },
+    { icon: Settings, label: "Settings", href: "/profile/settings" },
+];
+
 export default function Sidebar({ isOpen, onClose }) {
     const pathname = usePathname();
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("auth_token");
+        if (token) {
+            setRole(getRoleFromToken(token));
+        }
+    }, []);
+
+    const menuItems = role === "admin" ? adminItems : userItems;
+
+    const handleLogout = () => {
+        localStorage.removeItem("auth_token");
+        window.location.href = "/login";
+    };
 
     return (
         <>
@@ -43,7 +69,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="p-6 border-b border-zinc-800/50 flex items-center justify-between">
-                    <Link href="/admin" className="flex items-center gap-2" onClick={onClose}>
+                    <Link href="/" className="flex items-center gap-2" onClick={onClose}>
                         <div className="bg-netflix-red p-1.5 rounded-md">
                             <Film className="w-5 h-5 text-white" />
                         </div>
@@ -79,7 +105,10 @@ export default function Sidebar({ isOpen, onClose }) {
                 </nav>
 
                 <div className="p-4 border-t border-zinc-800">
-                    <button className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl hover:bg-zinc-900 hover:text-white transition-all duration-200 text-zinc-400 text-sm font-medium">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl hover:bg-zinc-900 hover:text-white transition-all duration-200 text-zinc-400 text-sm font-medium"
+                    >
                         <LogOut className="w-4.5 h-4.5" />
                         <span>Logout</span>
                     </button>
@@ -88,3 +117,4 @@ export default function Sidebar({ isOpen, onClose }) {
         </>
     );
 }
+

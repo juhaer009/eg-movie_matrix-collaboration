@@ -1,12 +1,21 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import logo from '../../public/logo.jpg'
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const pathname = usePathname();
+
+  // Don't show public footer on dashboard/admin pages
+  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
+    return null;
+  }
   return (
     <footer className="bg-gradient-to-br from-[#140f1f] via-[#1f1633] to-[#2a1f4a] text-gray-300 pt-12 pb-6 border-t border-purple-800">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
-        
+
         {/* Logo Section */}
         <div>
           <div className="flex items-center gap-3 mb-4">
@@ -101,4 +110,3 @@ const Footer = () => {
 };
 
 export default Footer;
- 

@@ -22,6 +22,10 @@ const Navbar = () => {
     }
   }, []);
 
+  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
+    return null;
+  }
+
   const navLinks = [
     { name: "Movies", path: "/movies" },
     { name: "Reviews", path: "/reviews" },
