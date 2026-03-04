@@ -30,80 +30,91 @@ const Footer = () => {
               MovieMatrix
             </h2>
           </div>
-          <p className="text-sm text-gray-400">
-            Discover, review and explore your favorite movies in one place.
-          </p>
-        </div>
 
-        {/* Important Links */}
-        <div>
-          <h3 className="text-white font-semibold mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="/" className="hover:text-amber-400 transition">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/foods" className="hover:text-amber-400 transition">
-                Movies
-              </Link>
-            </li>
-            <li>
-              <Link href="/reviews" className="hover:text-amber-400 transition">
-                Reviews
-              </Link>
-            </li>
-            <li>
-              <Link href="/feedback" className="hover:text-amber-400 transition">
-                Feedback
-              </Link>
-            </li>
-          </ul>
-        </div>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-white font-bold mb-6 text-lg">Quick Links</h3>
+            <ul className="space-y-3 text-sm">
+              {[
+                { name: 'Home', href: '/' },
+                { name: 'Movies', href: '/movies' },
+                { name: 'Reviews', href: '/reviews' },
+                { name: 'Feedback', href: '/feedback' },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-purple-400 transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500/50 group-hover:bg-purple-400 transition-colors"></span>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Extra Links */}
-        <div>
-          <h3 className="text-white font-semibold mb-4">Company</h3>
-          <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="#" className="hover:text-amber-400 transition">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-amber-400 transition">
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-amber-400 transition">
-                Terms & Conditions
-              </Link>
-            </li>
-          </ul>
-        </div>
+          {/* Company */}
+          <div>
+            <h3 className="text-white font-bold mb-6 text-lg">Company</h3>
+            <ul className="space-y-3 text-sm">
+              {[
+                { name: 'About Us', href: '#' },
+                { name: 'Privacy Policy', href: '#' },
+                { name: 'Terms & Conditions', href: '#' },
+                { name: 'Contact', href: '#' },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-pink-400 transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-pink-500/50 group-hover:bg-pink-400 transition-colors"></span>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Social Section */}
-        <div>
-          <h3 className="text-white font-semibold mb-4">Connect</h3>
-          <div className="flex gap-4 text-sm">
-            <Link href="#" className="hover:text-amber-400 transition">
-              Facebook
-            </Link>
-            <Link href="#" className="hover:text-amber-400 transition">
-              Twitter
-            </Link>
-            <Link href="#" className="hover:text-amber-400 transition">
-              GitHub
-            </Link>
+          {/* Newsletter */}
+          <div>
+            <h3 className="text-white font-bold mb-6 text-lg">Stay Updated</h3>
+            <p className="text-sm text-gray-400 mb-4">
+              Subscribe to get updates on new releases and exclusive content.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="flex-1 px-4 py-2.5 rounded-xl backdrop-blur-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-500 focus:outline-none focus:border-purple-500/50 transition-colors"
+              />
+              <button className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/50">
+                Join
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom */}
-      <div className="mt-10 border-t border-stone-700 pt-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} MUVIEMATRIX. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-white/10">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-gray-500">
+              © {new Date().getFullYear()} MovieMatrix. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+              <Link href="#" className="hover:text-purple-400 transition-colors">
+                Privacy
+              </Link>
+              <Link href="#" className="hover:text-purple-400 transition-colors">
+                Terms
+              </Link>
+              <Link href="#" className="hover:text-purple-400 transition-colors">
+                Cookies
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );

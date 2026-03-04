@@ -10,6 +10,20 @@ export default function MovieDetailsPage() {
     const params = useParams();
     const movie = movies.find((m) => m.id == params.id);
 
+    if (!movie) {
+        return (
+            <div className="bg-background-light dark:bg-background-dark font-display text-slate-200 antialiased overflow-x-hidden min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold text-white mb-4">Movie Not Found</h1>
+                    <p className="text-slate-400 mb-8">The movie you're looking for doesn't exist.</p>
+                    <Link href="/movies" className="gradient-primary px-6 py-3 rounded-lg text-white font-semibold">
+                        Back to Movies
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-slate-200 antialiased overflow-x-hidden min-h-screen">
             <main>

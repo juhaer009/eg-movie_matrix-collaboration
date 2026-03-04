@@ -1,49 +1,46 @@
 
+
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
+import { AuthContext } from "@/Authcontex/AuthContext";
 
 export default function ForgotPasswordPage() {
+
+  const { forgotPassword } = useContext(AuthContext); 
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setMessage("");
-  setError("");
 
-  try {
-    const res = await fetch("http://localhost:5000/forgot-password", {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify({ email }),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const data = await res.json();
+    setLoading(true);
+    setMessage("");
+    setError("");
 
-    if (!res.ok) {
-      setError(data.message || "Something went wrong");
-    } else {
-      setMessage(data.message);
+    try {
+      await forgotPassword(email);
+
+      setMessage("✅ Password reset email sent. Check your inbox.");
       setEmail("");
-    }
-  } catch (err) {
-    setError("Cannot connect to server");
-  }
 
-  setLoading(false);
-};
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen grid md:grid-cols-2">
-      
-      {/* 🔹 Left Side Image */}
+
+      {/* Left Side Image */}
       <div className="hidden md:flex items-center justify-center bg-indigo-950 p-10">
         <Image
           src="/forgot-password.webp"
@@ -54,7 +51,7 @@ const handleSubmit = async (e) => {
         />
       </div>
 
-      {/* 🔹 Right Side Form */}
+      {/* Right Side Form */}
       <div className="flex items-center justify-center bg-slate-50 p-6">
         <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
 
@@ -72,6 +69,7 @@ const handleSubmit = async (e) => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+
             <input
               type="email"
               required
@@ -88,6 +86,7 @@ const handleSubmit = async (e) => {
             >
               {loading ? "Sending..." : "Send Instructions"}
             </button>
+
           </form>
 
           {message && (
@@ -97,6 +96,7 @@ const handleSubmit = async (e) => {
           {error && (
             <p className="text-red-600 text-sm mt-4">{error}</p>
           )}
+
         </div>
       </div>
     </div>
