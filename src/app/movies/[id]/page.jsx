@@ -17,7 +17,7 @@ export default function MovieDetailsPage() {
                     <h1 className="text-4xl font-bold text-white mb-4">Movie Not Found</h1>
                     <p className="text-slate-400 mb-8">The movie you're looking for doesn't exist.</p>
                     <Link href="/movies" className="gradient-primary px-6 py-3 rounded-lg text-white font-semibold">
-                        Back to Movies
+                        Back to Home
                     </Link>
                 </div>
             </div>
