@@ -13,28 +13,6 @@ const Footer = () => {
     return null;
   }
   return (
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6b30f8301dead397608ecab0d1b62de1d08b6568
-    <footer className="bg-gradient-to-br from-[#140f1f] via-[#1f1633] to-[#2a1f4a] text-gray-300 pt-12 pb-6 border-t border-purple-800">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
-
-        {/* Logo Section */}
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <Image
-              src={logo}
-              width={50}
-              height={50}
-              alt="MovieMatrix Logo"
-              className="rounded-lg"
-            />
-            <h2 className="text-xl font-bold text-white tracking-wide">
-              MovieMatrix
-            </h2>
-<<<<<<< HEAD
-=======
     <footer className="relative backdrop-blur-xl bg-black/40 border-t border-white/10 text-gray-300 pt-16 pb-8 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
@@ -42,7 +20,6 @@ const Footer = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
-          
           {/* Logo Section */}
           <div>
             <div className="flex items-center gap-3 mb-6">
@@ -78,9 +55,6 @@ const Footer = () => {
                 </Link>
               ))}
             </div>
->>>>>>> a67107fed105704c3c8638e705c9ff46f7059991
-=======
->>>>>>> 6b30f8301dead397608ecab0d1b62de1d08b6568
           </div>
 
           {/* Quick Links */}
