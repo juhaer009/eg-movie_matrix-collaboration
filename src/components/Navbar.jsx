@@ -30,6 +30,7 @@ const Navbar = () => {
     { name: "Add Movies", path: "/addMovies" },
     { name: "Movies", path: "/movies" },
     { name: "Reviews", path: "/reviews" },
+    { name: "Profile", path: "/profile" },
   ];
 
   if (isLoggedIn) {
