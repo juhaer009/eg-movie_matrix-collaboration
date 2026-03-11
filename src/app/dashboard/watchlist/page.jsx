@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bookmark, Clock, Search, MoreHorizontal, Loader2, Trash2 } from "lucide-react";
+import { Bookmark, Clock, Search, Loader2, Trash2, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import useAuth from "../../../hook/useauth";
 
-export default function WatchlistPage() {
+export default function DashboardWatchlistPage() {
   const { user, loding: authLoading } = useAuth();
   const [watchlistData, setWatchlistData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ export default function WatchlistPage() {
         const response = await fetch(`http://localhost:5000/api/watchlist/${user.uid}`);
         if (response.ok) {
           const data = await response.json();
-          console.log("Admin watchlist data:", data);
+          console.log("Dashboard watchlist data:", data);
           setWatchlistData(data.watchlist || []);
         } else {
           console.error("Failed to fetch watchlist:", response.status);
@@ -87,7 +87,7 @@ export default function WatchlistPage() {
       initial="hidden"
       animate="show"
       variants={container}
-      className="space-y-8"
+      className="space-y-8 min-h-screen"
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -116,7 +116,7 @@ export default function WatchlistPage() {
         </div>
       ) : filteredWatchlist.length === 0 ? (
         <div className="bg-zinc-900/40 backdrop-blur-xl border border-zinc-800 rounded-2xl p-12 text-center">
-          <Bookmark className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+          <Heart className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-zinc-400 mb-2">
             {!user ? "Please login" : searchQuery ? "No results found" : "Your watchlist is empty"}
           </h3>
@@ -206,7 +206,7 @@ export default function WatchlistPage() {
                   {formatDate(data.createdAt)}
                 </div>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-tighter">
-                  Active
+                  Saved
                 </span>
               </div>
 

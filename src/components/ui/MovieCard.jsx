@@ -25,7 +25,7 @@ export default function MovieCard({ movie }) {
         </div>
 
         <p className="text-sm text-gray-400">
-          {movie.genre} • {movie.duration}
+          {Array.isArray(movie.genre) ? movie.genre.join(' / ') : movie.genre} • {movie.duration}
         </p>
 
         <p className="text-sm text-gray-300 line-clamp-3">
@@ -34,7 +34,7 @@ export default function MovieCard({ movie }) {
 
         <div className="flex justify-between items-center pt-2">
           <span className="text-lg font-semibold text-green-400">
-            {movie.price}
+            ${typeof movie.price === 'number' ? movie.price.toFixed(2) : movie.price}
           </span>
 
           <MovieCardBtn id={movie._id} initialWatchlistStatus={movie.watchlistStatus} />  
