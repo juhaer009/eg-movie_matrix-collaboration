@@ -47,9 +47,9 @@ const nextConfig = {
         hostname: "www.engineersgarage.com",
       },
       {
-  protocol: "https",
-  hostname: "i.ibb.co.com",
-},
+        protocol: "https",
+        hostname: "i.ibb.co.com",
+      },
     ],
   },
 };
