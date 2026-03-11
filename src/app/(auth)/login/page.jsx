@@ -15,7 +15,7 @@ import { getRoleFromToken } from '@/lib/auth';
 
 const LoginPage = () => {
   const router = useRouter();
-  const { GoogleSignIN } = useAuth();
+  const { GoogleSignIN, signInUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,6 +35,10 @@ const LoginPage = () => {
     setError("");
 
     try {
+      // 1. Authenticate with Firebase first (for sync with Navbar/UI)
+      await signInUser(formData.email, formData.password);
+
+      // 2. Validate with Backend (for JWT and Roles)
       const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: {
@@ -73,16 +77,48 @@ const LoginPage = () => {
     }
   };
 
-  const RegWithGoogle = () => {
-    GoogleSignIN()
-      .then((result) => {
-        router.push('/');
-      })
-      .catch((error) => {
-        if (error.code === 'auth/popup-closed-by-user') {
-          window.location.reload();
-        }
+  const RegWithGoogle = async () => {
+    try {
+      const result = await GoogleSignIN();
+      const user = result.user;
+
+      // Notify backend about social login
+      const response = await fetch("http://localhost:5000/api/users/social-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to sync social login with backend");
+      }
+
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token);
+        const role = getRoleFromToken(data.token);
+        if (role === 'admin') {
+          router.push("/admin");
+        } else {
+          router.push("/dashboard");
+        }
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Google Login Error:", error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        window.location.reload();
+      } else {
+        setError("Social login failed. Please try again.");
+      }
+    }
   };
 
   return (

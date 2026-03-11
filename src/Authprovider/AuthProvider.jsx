@@ -9,7 +9,6 @@ const AuthProvider = ({ children }) => {
     const [loding, setLoading] = useState(true)
     const [user, setUser] = useState(true)
 
-    // google login
     const GoogleSignIN = () => {
         setLoading(true);
         return signInWithPopup(auth, provider)
@@ -25,17 +24,17 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signInWithEmailAndPassword(auth, email, password)
     }
-  const Updateprofile = async (profile) => {
-  if (!auth.currentUser) return;
+    const Updateprofile = async (profile) => {
+        if (!auth.currentUser) return;
 
-  await updateProfile(auth.currentUser, profile);
+        await updateProfile(auth.currentUser, profile);
 
-  // optional: updated user set করা
-  setUser({ ...auth.currentUser });
-};
-          const forgotPassword = (email) => {
-    return sendPasswordResetEmail(auth, email);
-  }
+        // optional: updated user set করা
+        setUser({ ...auth.currentUser });
+    };
+    const forgotPassword = (email) => {
+        return sendPasswordResetEmail(auth, email);
+    }
 
 
 

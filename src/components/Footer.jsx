@@ -1,147 +1,162 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from '../../public/logo.jpg'
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import Logo from "@/components/Logo";
+import { Facebook, Twitter, Instagram, Github, Send } from "lucide-react";
 
 const Footer = () => {
   const pathname = usePathname();
+  const footerRef = useRef(null);
+  const socialRef = useRef([]);
 
-  // Don't show public footer on dashboard/admin pages
-  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
-    return null;
-  }
+  // GSAP: Magnetic effect for social icons
+  useEffect(() => {
+    socialRef.current.forEach((el) => {
+      if (!el) return;
+      const moveIcon = (e) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = el.getBoundingClientRect();
+        const x = clientX - (left + width / 2);
+        const y = clientY - (top + height / 2);
+        gsap.to(el, { x: x * 0.4, y: y * 0.4, duration: 0.3, ease: "power2.out" });
+      };
+      const resetIcon = () => {
+        gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+      };
+      el.addEventListener("mousemove", moveIcon);
+      el.addEventListener("mouseleave", resetIcon);
+      return () => {
+        el.removeEventListener("mousemove", moveIcon);
+        el.removeEventListener("mouseleave", resetIcon);
+      };
+    });
+  }, []);
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) return null;
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, staggerChildren: 0.1, ease: "easeOut" },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <footer className="relative backdrop-blur-xl bg-black/40 border-t border-white/10 text-gray-300 pt-16 pb-8 overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl"></div>
+    <footer
+      ref={footerRef}
+      className="relative bg-black border-t border-white/5 text-zinc-500 pt-20 pb-10 overflow-hidden"
+    >
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-red-900/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
-          {/* Logo Section */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="relative">
-                <Image
-                  src={logo}
-                  width={52}
-                  height={52}
-                  alt="MovieMatrix Logo"
-                  className="rounded-xl ring-2 ring-purple-500/30"
-                />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-purple-500/20 to-pink-500/20"></div>
-              </div>
-              <h2 className="text-2xl font-black text-white tracking-tight">
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Movie</span>
-                <span className="text-white">Matrix</span>
-              </h2>
-            </div>
-            <p className="text-sm text-gray-400 leading-relaxed mb-6">
-              Discover, review and explore your favorite movies in one place. Stream unlimited entertainment.
+      <motion.div
+        className="px-6 md:px-12 lg:px-20 relative z-10"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-center sm:text-left">
+
+          <motion.div variants={itemVariants} className="space-y-6 flex flex-col items-center sm:items-start">
+            <Logo iconSize={40} textSize="text-2xl" />
+            <p className="text-sm leading-relaxed text-zinc-600 max-w-xs">
+              The ultimate destination for cinephiles. Tracking the heartbeat of
+              global cinema with precision and style.
             </p>
-            {/* Social Icons */}
-            <div className="flex gap-3">
-              {['Facebook', 'Twitter', 'Instagram'].map((social) => (
-                <Link
-                  key={social}
-                  href="#"
-                  className="w-10 h-10 rounded-xl backdrop-blur-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-purple-500/50 flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+            <div className="flex gap-4">
+              {[
+                { icon: <Facebook size={18} />, color: "hover:text-primary" },
+                { icon: <Twitter size={18} />, color: "hover:text-primary" },
+                { icon: <Instagram size={18} />, color: "hover:text-primary" },
+                { icon: <Github size={18} />, color: "hover:text-white" },
+              ].map((social, i) => (
+                <div
+                  key={i}
+                  ref={(el) => (socialRef.current[i] = el)}
+                  className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer transition-colors ${social.color}`}
                 >
-                  <span className="text-xs text-gray-400 group-hover:text-purple-400 transition-colors">
-                    {social.charAt(0)}
-                  </span>
-                </Link>
+                  {social.icon}
+                </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-white font-bold mb-6 text-lg">Quick Links</h3>
-            <ul className="space-y-3 text-sm">
-              {[
-                { name: 'Home', href: '/' },
-                { name: 'Movies', href: '/movies' },
-                { name: 'Reviews', href: '/reviews' },
-                { name: 'Feedback', href: '/feedback' },
-              ].map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-purple-400 transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500/50 group-hover:bg-purple-400 transition-colors"></span>
-                    {link.name}
+          <motion.div variants={itemVariants} className="hidden sm:block">
+            <h3 className="text-white font-black mb-8 uppercase tracking-[0.3em] text-[10px]">Navigation</h3>
+            <ul className="space-y-5">
+              {['Home', 'Movies', 'Reviews', 'Feedback'].map((item) => (
+                <li key={item}>
+                  <Link href={`/${item.toLowerCase()}`} className="text-xs font-bold hover:text-primary transition-colors flex items-center group">
+                    <span className="h-[1px] w-0 bg-primary mr-0 transition-all group-hover:w-4 group-hover:mr-2" />
+                    {item}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Company */}
-          <div>
-            <h3 className="text-white font-bold mb-6 text-lg">Company</h3>
-            <ul className="space-y-3 text-sm">
-              {[
-                { name: 'About Us', href: '#' },
-                { name: 'Privacy Policy', href: '#' },
-                { name: 'Terms & Conditions', href: '#' },
-                { name: 'Contact', href: '#' },
-              ].map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-pink-400 transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-pink-500/50 group-hover:bg-pink-400 transition-colors"></span>
-                    {link.name}
+          <motion.div variants={itemVariants} className="hidden sm:block">
+            <h3 className="text-white font-black mb-8 uppercase tracking-[0.3em] text-[10px]">Legal</h3>
+            <ul className="space-y-5">
+              {['About Us', 'Privacy Policy', 'Terms', 'Contact'].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-xs font-bold hover:text-primary transition-colors flex items-center group">
+                    <span className="h-[1px] w-0 bg-primary mr-0 transition-all group-hover:w-4 group-hover:mr-2" />
+                    {item}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Newsletter */}
-          <div>
-            <h3 className="text-white font-bold mb-6 text-lg">Stay Updated</h3>
-            <p className="text-sm text-gray-400 mb-4">
-              Subscribe to get updates on new releases and exclusive content.
-            </p>
-            <div className="flex gap-2">
+          <motion.div variants={itemVariants} className="space-y-8">
+            <h3 className="text-white font-black uppercase tracking-[0.3em] text-[10px]">Matrix Newsletter</h3>
+            <div className="relative group/input">
               <input
                 type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-2.5 rounded-xl backdrop-blur-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-500 focus:outline-none focus:border-purple-500/50 transition-colors"
+                placeholder="Secure email link"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all placeholder:text-zinc-700 italic"
               />
-              <button className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/50">
-                Join
+              <button className="absolute right-2 top-2 p-2.5 bg-primary rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-primary/20">
+                <Send size={18} className="text-white" />
               </button>
             </div>
-          </div>
+            <p className="text-[10px] text-zinc-700 uppercase tracking-widest leading-relaxed">
+              * Join the cinematic elite. By joining, you agree to receive digital marketing communications.
+            </p>
+          </motion.div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-500">
-              © {new Date().getFullYear()} MovieMatrix. All rights reserved.
-            </p>
-            <div className="flex items-center gap-6 text-sm text-gray-500">
-              <Link href="#" className="hover:text-purple-400 transition-colors">
-                Privacy
+        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-[10px] uppercase font-black tracking-widest text-zinc-700">
+            © {new Date().getFullYear()} MovieMatrix Studio. All rights reserved.
+          </p>
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+            {['Status', 'Sitemap', 'Cookie Preferences'].map((link) => (
+              <Link key={link} href="#" className="text-[10px] uppercase tracking-[0.4em] font-black text-zinc-700 hover:text-white transition-colors">
+                {link}
               </Link>
-              <Link href="#" className="hover:text-purple-400 transition-colors">
-                Terms
-              </Link>
-              <Link href="#" className="hover:text-purple-400 transition-colors">
-                Cookies
-              </Link>
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 };

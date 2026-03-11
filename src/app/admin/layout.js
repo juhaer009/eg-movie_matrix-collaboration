@@ -10,18 +10,13 @@ export default function AdminLayout({ children }) {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white selection:bg-netflix-red selection:text-white flex overflow-hidden">
-      {/* Sidebar - Fixed/Overlay */}
+      <div className="min-h-screen bg-zinc-950 text-white selection:bg-netflix-red selection:text-white flex overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen relative overflow-hidden transition-all duration-300 lg:pl-64">
-        {/* Navbar - Fixed */}
+        <div className="flex-1 flex flex-col min-h-screen relative overflow-hidden transition-all duration-300 lg:pl-64">
         <AdminNavbar onMenuClick={toggleSidebar} />
 
-        {/* Dynamic Content */}
-        <main className="flex-1 mt-16 p-4 md:p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto">            <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {children}
           </div>
         </main>
