@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getRoleFromToken } from "@/lib/auth";
+import Logo from "@/components/Logo";
 
 const adminItems = [
     { icon: LayoutDashboard, label: "Admin Dashboard", href: "/admin" },
@@ -69,13 +70,8 @@ export default function Sidebar({ isOpen, onClose }) {
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="p-6 border-b border-zinc-800/50 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2" onClick={onClose}>
-                        <div className="bg-netflix-red p-1.5 rounded-md">
-                            <Film className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-lg font-bold text-white tracking-tight">
-                            MOVIE<span className="text-netflix-red">MATRIX</span>
-                        </span>
+                    <Link href="/" onClick={onClose}>
+                        <Logo iconSize={32} textSize="text-lg" />
                     </Link>
                 </div>
 
@@ -90,13 +86,13 @@ export default function Sidebar({ isOpen, onClose }) {
                                 className={cn(
                                     "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-sm font-medium",
                                     isActive
-                                        ? "bg-netflix-red/10 text-netflix-red border border-red-500/20 shadow-[0_4px_12px_rgba(229,9,20,0.1)]"
+                                        ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_4px_12px_rgba(229,9,20,0.1)]"
                                         : "hover:bg-zinc-900 hover:text-white"
                                 )}
                             >
                                 <item.icon className={cn(
                                     "w-4.5 h-4.5 transition-transform duration-200 group-hover:scale-110",
-                                    isActive ? "text-netflix-red" : "text-zinc-500 group-hover:text-white"
+                                    isActive ? "text-primary" : "text-zinc-500 group-hover:text-white"
                                 )} />
                                 <span>{item.label}</span>
                             </Link>

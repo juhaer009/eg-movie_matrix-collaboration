@@ -107,7 +107,6 @@ export default function Dashboard() {
       variants={containerVariants}
       className="space-y-8 pb-12"
     >
-      {/* Header */}
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
@@ -126,7 +125,6 @@ export default function Dashboard() {
         </div>
       </motion.div>
 
-      {/* 1. Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
           <motion.div 

@@ -25,7 +25,7 @@ const Movies = async () => {
       {movies.length === 0 ? (
         <p className="text-center text-gray-500">No movies available</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {movies.map((movie, index) => (
             <MovieCard key={movie._id || index} movie={movie}></MovieCard>
           ))}

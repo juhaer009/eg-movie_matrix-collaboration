@@ -27,7 +27,7 @@ export default function MovieDetailsPage() {
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-slate-200 antialiased overflow-x-hidden min-h-screen">
             <main>
-               
+
                 <section className="relative w-full h-[85vh] overflow-hidden">
                     <div
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
@@ -35,7 +35,7 @@ export default function MovieDetailsPage() {
                             backgroundImage: `linear-gradient(to top, #0f172a 0%, rgba(15, 23, 42, 0.4) 40%, rgba(15, 23, 42, 0) 100%), url('${movie.image}')`,
                         }}
                     ></div>
-                    <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-24">
+                    <div className="relative h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-24">
                         <div className="flex flex-wrap gap-3 mb-6">
                             <div className="gradient-primary px-3 py-1 rounded text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1 shadow-lg">
                                 <span className="material-symbols-outlined text-sm">
@@ -72,10 +72,10 @@ export default function MovieDetailsPage() {
                     </div>
                 </section>
 
-              
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+                <section className=" px-4 sm:px-6 lg:px-8 py-16">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                     
+
                         <div className="lg:col-span-2 space-y-12">
                             <div>
                                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
@@ -209,7 +209,7 @@ export default function MovieDetailsPage() {
                 </section>
 
                 {/* Recommendations Section */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <section className=" px-4 sm:px-6 lg:px-8 py-16">
                     <h2 className="text-2xl font-bold text-white mb-10 flex items-center gap-3">
                         <span className="w-1.5 h-8 bg-accent-blue rounded-full"></span>
                         You Might Also Like

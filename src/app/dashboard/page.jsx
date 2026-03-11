@@ -97,7 +97,7 @@ export default function UserDashboard() {
             </div>
 
             {/* Main Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-6 pt-8 pb-12">
+            <div className="relative z-10 px-6 pt-8 pb-12">
                 <motion.div
                     initial="hidden"
                     animate="visible"

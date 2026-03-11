@@ -42,7 +42,7 @@ export default function MoviesLoading() {
       <p className="mt-2 text-sm text-blue-400">{progress}%</p>
 
       {/* Movie Grid Skeleton */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto mt-12 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12 px-4">
         {[...Array(8)].map((_, index) => (
           <div
             key={index}
