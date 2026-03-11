@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { movies } from "../../../data/movies";
 import Link from "next/link";
 import Image from "next/image";
+import MovieCardBtn from "../../../components/ui/MovieCardBtn";
 
 export default function MovieDetailsPage() {
     const params = useParams();
@@ -64,10 +65,7 @@ export default function MovieDetailsPage() {
                                 <span className="material-symbols-outlined">play_arrow</span>
                                 Watch Now
                             </button>
-                            <button className="bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md transition-all flex items-center gap-2 px-8 py-4 rounded-xl text-white font-bold text-lg">
-                                <span className="material-symbols-outlined">add</span>
-                                Add to Watchlist
-                            </button>
+                            <MovieCardBtn id={movie.id} variant="large" />
                         </div>
                     </div>
                 </section>

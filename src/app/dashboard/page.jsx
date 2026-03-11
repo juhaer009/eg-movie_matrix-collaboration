@@ -9,21 +9,19 @@ import {
     Star,
     TrendingUp,
     User,
-    Search,
-    Settings,
-    Bell,
-    LogOut,
-    ChevronRight,
     Flame,
     Gamepad2,
-    Tv
+    Tv,
+    Loader2
 } from "lucide-react";
 import Link from "next/link";
+import useAuth from "../../hook/useauth";
+import MovieCard from "../../components/ui/MovieCard";
 
 const stats = [
     { label: "Points Earned", value: "840", icon: Star, color: "text-amber-500", shadow: "shadow-amber-500/20" },
     { label: "Movies Watched", value: "112", icon: Play, color: "text-netflix-red", shadow: "shadow-netflix-red/20" },
-    { label: "Watchlist", value: "24", icon: Heart, color: "text-emerald-500", shadow: "shadow-emerald-500/20" },
+    { label: "Watchlist", value: "0", icon: Heart, color: "text-emerald-500", shadow: "shadow-emerald-500/20" },
 ];
 
 const recommendationData = [
@@ -75,6 +73,47 @@ function TiltCard({ children, stat }) {
 }
 
 export default function UserDashboard() {
+    const { user, loding: authLoading } = useAuth();
+    const [watchlistMovies, setWatchlistMovies] = useState([]);
+    const [isLoadingWatchlist, setIsLoadingWatchlist] = useState(true);
+    const [watchlistCount, setWatchlistCount] = useState(0);
+
+    // Fetch watchlist movies
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            if (authLoading || !user?.uid) {
+                setIsLoadingWatchlist(false);
+                return;
+            }
+
+            setIsLoadingWatchlist(true);
+            try {
+                const response = await fetch(`http://localhost:5000/api/watchlist/${user.uid}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Watchlist data:", data);
+                    setWatchlistMovies(data.watchlist || []);
+                    setWatchlistCount(data.count || 0);
+                } else {
+                    console.error("Failed to fetch watchlist:", response.status);
+                }
+            } catch (error) {
+                console.error("Error fetching watchlist:", error);
+            } finally {
+                setIsLoadingWatchlist(false);
+            }
+        };
+
+        fetchWatchlist();
+    }, [user?.uid, authLoading]);
+
+    // Update stats with actual watchlist count
+    const dynamicStats = [
+        { label: "Points Earned", value: "840", icon: Star, color: "text-amber-500", shadow: "shadow-amber-500/20" },
+        { label: "Movies Watched", value: "112", icon: Play, color: "text-netflix-red", shadow: "shadow-netflix-red/20" },
+        { label: "Watchlist", value: watchlistCount.toString(), icon: Heart, color: "text-emerald-500", shadow: "shadow-emerald-500/20" },
+    ];
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -127,7 +166,7 @@ export default function UserDashboard() {
 
                     {/* 3D Stat Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {stats.map((stat, idx) => (
+                        {dynamicStats.map((stat, idx) => (
                             <motion.div key={idx} variants={itemVariants}>
                                 <TiltCard stat={stat}>
                                     <div className="flex items-center justify-between relative z-10">
@@ -145,49 +184,45 @@ export default function UserDashboard() {
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Recommendations */}
-                        <div className="lg:col-span-2 space-y-8">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-black flex items-center gap-3">
-                                    <Tv className="w-6 h-6 text-netflix-red" />
-                                    SUGGESTED FOR YOU
-                                </h2>
-                                <button className="text-zinc-500 hover:text-white text-sm font-bold flex items-center gap-1 transition-all">
-                                    EXPLORE ALL <ChevronRight className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                                {recommendationData.map((movie) => (
-                                    <motion.div
-                                        key={movie.id}
-                                        variants={itemVariants}
-                                        whileHover={{
-                                            scale: 1.05,
-                                            rotateY: movie.id % 2 === 0 ? 10 : -10,
-                                            z: 50
-                                        }}
-                                        className="group relative h-[320px] rounded-3xl overflow-hidden border border-zinc-800 transition-all duration-500 shadow-2xl"
-                                        style={{ transformStyle: "preserve-3d" }}
-                                    >
-                                        <img src={movie.poster} alt={movie.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80" />
-                                        <div className="absolute inset-x-0 bottom-0 p-5 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500" style={{ transform: "translateZ(30px)" }}>
-                                            <p className="text-netflix-red text-[10px] font-black uppercase tracking-widest">{movie.genre}</p>
-                                            <h4 className="font-bold text-white truncate drop-shadow-lg">{movie.title}</h4>
-                                            <div className="flex items-center gap-1 mt-1">
-                                                <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                                                <span className="text-xs font-bold text-zinc-300">{movie.rating}</span>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
+                    {/* Watchlist Section */}
+                    <div className="space-y-8">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-2xl font-black flex items-center gap-3">
+                                <Heart className="w-6 h-6 text-netflix-red" />
+                                MY WATCHLIST
+                            </h2>
+                            <Link href="/movies" className="text-zinc-500 hover:text-white text-sm font-bold flex items-center gap-1 transition-all">
+                                BROWSE MOVIES
+                            </Link>
                         </div>
 
+                        {isLoadingWatchlist ? (
+                            <div className="flex items-center justify-center py-20">
+                                <Loader2 className="w-8 h-8 text-netflix-red animate-spin" />
+                            </div>
+                        ) : watchlistMovies.length === 0 ? (
+                            <div className="bg-zinc-900/40 backdrop-blur-xl border border-zinc-800 rounded-[2.5rem] p-12 text-center">
+                                <Heart className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+                                <h3 className="text-xl font-bold text-zinc-400 mb-2">Your watchlist is empty</h3>
+                                <p className="text-zinc-600 mb-6">Start adding movies you want to watch!</p>
+                                <Link href="/movies">
+                                    <button className="bg-netflix-red text-white px-6 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-all">
+                                        EXPLORE MOVIES
+                                    </button>
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {watchlistMovies.map((item) => (
+                                    <MovieCard key={item._id || item.movieId} movie={item.movie} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Side Activity Panel */}
-                        <div className="space-y-8">
+                        <div className="lg:col-span-1 space-y-8">
                             <h2 className="text-2xl font-black flex items-center gap-3">
                                 <Clock className="w-6 h-6 text-netflix-red" />
                                 ACTIVITY
