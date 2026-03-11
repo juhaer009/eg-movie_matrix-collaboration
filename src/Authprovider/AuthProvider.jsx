@@ -25,10 +25,14 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signInWithEmailAndPassword(auth, email, password)
     }
+  const Updateprofile = async (profile) => {
+  if (!auth.currentUser) return;
 
-    const Updateprofile = (Profile) => {
-        return updateProfile(auth.currentUser, Profile)
-    };
+  await updateProfile(auth.currentUser, profile);
+
+  // optional: updated user set করা
+  setUser({ ...auth.currentUser });
+};
           const forgotPassword = (email) => {
     return sendPasswordResetEmail(auth, email);
   }

@@ -34,5 +34,4 @@ const Movies = async () => {
     </div>
   );
 };
-
 export default Movies;
