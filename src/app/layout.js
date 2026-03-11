@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "MovieMatrix - Stream Unlimited Movies & TV Shows",
-  description: "Discover, review and explore your favorite movies in one place. Stream unlimited entertainment.",
+  description:
+    "Discover, review and explore your favorite movies in one place. Stream unlimited entertainment.",
 };
 
 export default function RootLayout({ children }) {
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
-        <Navbar />
+        <AuthProvider>
+          <Navbar />
+        </AuthProvider>
 
         <main className="min-h-screen pt-20">
           <AuthProvider>{children}</AuthProvider>

@@ -45,7 +45,6 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
-
     const authInfo = {
         user,
         GoogleSignIN,
@@ -56,7 +55,6 @@ const AuthProvider = ({ children }) => {
         signInUser,
         Updateprofile,
         forgotPassword
-
     }
     return (
         <AuthContext value={authInfo}>
