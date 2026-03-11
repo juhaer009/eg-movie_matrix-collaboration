@@ -2,8 +2,9 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const MovieCardBtn = ({ id, initialWatchlistStatus = false }) => {
+const MovieCardBtn = ({ id, initialWatchlistStatus = false, }) => {
   const [isInWatchlist, setIsInWatchlist] = useState(initialWatchlistStatus);
+  
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleWatchlist = async () => {
@@ -27,17 +28,16 @@ const MovieCardBtn = ({ id, initialWatchlistStatus = false }) => {
         throw new Error("Failed to update watchlist");
       }
 
-      // Success - state already updated optimistically
     } catch (error) {
       console.error("Error updating watchlist:", error);
-      // Revert on error
+    
       setIsInWatchlist(previousState);
       alert("Failed to update watchlist. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
-
+ 
   return (
     <div className="flex items-center gap-2">
       <button
@@ -75,6 +75,7 @@ const MovieCardBtn = ({ id, initialWatchlistStatus = false }) => {
         )}
       </button>
 
+
       <button className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">
         <Link href={`/movies/${id}`}>Details</Link>
       </button>
@@ -87,3 +88,6 @@ const MovieCardBtn = ({ id, initialWatchlistStatus = false }) => {
 };
 
 export default MovieCardBtn;
+
+
+
