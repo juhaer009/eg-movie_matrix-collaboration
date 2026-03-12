@@ -2,17 +2,20 @@
 "use client";
 
 import useAuth from "@/hook/useauth";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-  const { user, Updateprofile } = useAuth();
-
+  const { user, Updateprofile,GoogleSignOut,moviesWatched } = useAuth();
+const [watchHours, setWatchHours] = useState(0);
+  const router = useRouter();
+  const [recentMovies, setRecentMovies] = useState([]);
   const [name, setName] = useState(user?.displayName || "");
   const [photo, setPhoto] = useState(user?.photoURL || "");
   const [editing, setEditing] = useState(false);
-
+const aiMatch = Math.min(moviesWatched * 5, 100);
   const handleUpdate = async () => {
     await Updateprofile({
       displayName: name,
@@ -21,8 +24,23 @@ export default function ProfilePage() {
     setEditing(false);
   };
 
+const handleLogout = async () => {
+  await GoogleSignOut();
+  router.push("/login");
+};
+
+useEffect(() => {
+  const time = localStorage.getItem("watchTime") || 0;
+  const hours = (Number(time) / 60).toFixed(1);
+  setWatchHours(hours);
+}, []);
+
+useEffect(() => {
+  const movies = JSON.parse(localStorage.getItem("recentMovies")) || [];
+  setRecentMovies(movies);
+}, []);
   return (
-    <div className="min-h-screen bg-black flex justify-center items-center p-6">
+    <div className="min-h-screen mt-20  bg-black flex justify-center items-center p-6">
   <div className="bg-gray-500 shadow-xl text-black rounded-2xl w-full max-w-5xl p-8 grid md:grid-cols-3 gap-8">
     
     {/* LEFT SIDE */}
@@ -67,6 +85,12 @@ export default function ProfilePage() {
           <Button onClick={() => setEditing(true)}>Edit Profile</Button>
         )}
       </div>
+        <button
+        onClick={handleLogout}
+        className="mt-6 bg-red-600 hover:bg-red-500 px-6 py-3 rounded-xl text-white font-semibold transition-all duration-300"
+      >
+        Logout
+      </button>
     </div>
 
     {/* RIGHT SIDE */}
@@ -75,13 +99,13 @@ export default function ProfilePage() {
       {/* STATS */}
       <div className="flex flex-row flex-wrap gap-4">
         <div className="px-6 py-3 rounded-full shadow-xl bg-cyan-500 hover:scale-105 transition text-white">
-          🎬 {user?.stats?.watched || 0} Movies Watched
+         🎬 Movies Watched:  {moviesWatched}
         </div>
-        <div className="px-6 py-3 rounded-full shadow-xl bg-purple-500 hover:scale-105 transition text-white">
-          ⏱ {user?.stats?.hours || 0} Hours Watched
-        </div>
+         <div className="px-6 py-3 rounded-full shadow-xl bg-purple-500 hover:scale-105 transition text-white">
+    ⏱ {watchHours} Hours Watched
+  </div>
         <div className="px-6 py-3 rounded-full shadow-xl bg-pink-500 hover:scale-105 transition text-white">
-          🤖 {user?.stats?.aiMatch || 0}% AI Match
+          🤖 {aiMatch}% AI Match
         </div>
       </div>
 
@@ -89,24 +113,13 @@ export default function ProfilePage() {
       <div>
         <h2 className="text-2xl font-semibold mb-4">🕒 Recently Watched</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {user?.recentMovies?.length > 0 ? (
-            user.recentMovies.map((movie) => (
-              <div
-                key={movie.id}
-                className="bg-white/10 rounded-xl overflow-hidden hover:scale-105 transition"
-              >
-                <img
-                  src={movie.poster}
-                  alt={movie.title}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-2 text-sm text-center">{movie.title}</div>
-              </div>
-            ))
-          ) : (
-            <p className="opacity-60">No recent movies</p>
-          )}
-        </div>
+  {recentMovies.length > 0 ? recentMovies.map(movie => (
+    <div key={movie.id} className="bg-white/10 rounded-xl overflow-hidden hover:scale-105 transition">
+      <img src={movie.poster} alt={movie.title} className="w-full h-40 object-cover" />
+      <div className="p-2 text-sm text-center">{movie.title}</div>
+    </div>
+  )) : <p className="opacity-60">No recent movies</p>}
+</div>
       </div>
 
       {/* FAVORITE GENRES */}

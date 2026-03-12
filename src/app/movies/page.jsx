@@ -21,7 +21,7 @@ const Movies = async () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-center">All Movies</h1>
+      <h1 className="text-3xl mt-20 font-bold mb-6 text-center">All Movies</h1>
       {movies.length === 0 ? (
         <p className="text-center text-gray-500">No movies available</p>
       ) : (

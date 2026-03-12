@@ -1,19 +1,22 @@
 "use client";
+import useAuth from "@/hook/useauth";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import useAuth from "../../hook/useauth";
 
-const MovieCardBtn = ({ id, initialWatchlistStatus = false, variant = "card", showDetails = true, showBookNow = true }) => {
-  const { user, loding: authLoading } = useAuth();
+
+const MovieCardBtn = ({ id, poster ,title,duration,initialWatchlistStatus = false, variant = "card", showDetails = true, showBookNow = true }) => {
+  const { user, loding: authLoading,incrementMoviesWatched } = useAuth();
   const [isInWatchlist, setIsInWatchlist] = useState(initialWatchlistStatus);
   
+
+
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingStatus, setIsCheckingStatus] = useState(true);
 
-  // Fetch watchlist status when component mounts or user changes
+
   useEffect(() => {
     const fetchWatchlistStatus = async () => {
-      // Wait for auth to load
+      
       if (authLoading) {
         return;
       }
@@ -121,6 +124,19 @@ const MovieCardBtn = ({ id, initialWatchlistStatus = false, variant = "card", sh
     }
   };
 
+  const handleWatchNow = () => {
+  incrementMoviesWatched();
+
+  const movieDuration = Number(duration) || 120; 
+  const oldTime = Number(localStorage.getItem("watchTime")) || 0;
+  const newTime = oldTime + movieDuration;
+  localStorage.setItem("watchTime", newTime);
+
+  // recently watched
+  const oldMovies = JSON.parse(localStorage.getItem("recentMovies")) || [];
+  const updatedMovies = [{ id, title, poster, duration: movieDuration }, ...oldMovies.filter(m => m.id !== id)].slice(0,6);
+  localStorage.setItem("recentMovies", JSON.stringify(updatedMovies));
+};
   // Large button variant for movie details page
   if (variant === "large") {
     return (
@@ -193,14 +209,16 @@ const MovieCardBtn = ({ id, initialWatchlistStatus = false, variant = "card", sh
       </button>
 
 
-      {showDetails && (
-        <button className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">
-          <Link href={`/movies/${id}`}>Details</Link>
-        </button>
-      )}
+<button className="bg-indigo-600 hover:bg-indigo-500 px-2 py-2 rounded-xl text-sm font-medium transition-all duration-300" onClick={handleWatchNow}
+>
+  Watch Now
+</button>
+      <button className="bg-indigo-600 hover:bg-indigo-500 px-2 py-2 rounded-xl text-sm font-medium transition-all duration-300">
+        <Link href={`/movies/${id}`}>Details</Link>
+      </button>
 
       {showBookNow && (
-        <button className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">
+        <button className="bg-indigo-600 hover:bg-indigo-500 px-2 py-2 rounded-xl text-sm font-medium transition-all duration-300">
           Book Now
         </button>
       )}
