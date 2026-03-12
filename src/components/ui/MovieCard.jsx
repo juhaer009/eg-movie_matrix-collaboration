@@ -37,7 +37,9 @@ export default function MovieCard({ movie }) {
             ${typeof movie.price === 'number' ? movie.price.toFixed(2) : movie.price}
           </span>
 
-          <MovieCardBtn id={movie._id} initialWatchlistStatus={movie.watchlistStatus} />  
+          <MovieCardBtn id={movie._id}  title={movie.title} 
+        poster={movie.image} 
+      duration={Number(movie.duration)}  initialWatchlistStatus={movie.watchlistStatus} />  
         </div>
       </div>
     </div>
