@@ -57,16 +57,9 @@ const LoginPage = () => {
       }
 
       const result = await response.json();
-      if (result.token) {
-        localStorage.setItem("auth_token", result.token);
-
-        const role = getRoleFromToken(result.token);
-        if (role === 'admin') {
-          router.push("/admin");
-        } else {
-          router.push("/dashboard");
-        }
-      } else {
+      if (result.user) {
+        // We no longer use localStorage. The browser handles the cookie automatically.
+        const role = result.user.role;
         router.push("/");
       }
     } catch (err) {
@@ -100,9 +93,8 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
-      if (data.token) {
-        localStorage.setItem("auth_token", data.token);
-        const role = getRoleFromToken(data.token);
+      if (data.user) {
+        const role = data.user.role;
         if (role === 'admin') {
           router.push("/admin");
         } else {

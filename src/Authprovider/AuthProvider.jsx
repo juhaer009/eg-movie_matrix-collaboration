@@ -42,11 +42,31 @@ const forgotPassword = (email) => {
   setMoviesWatched((prev) => prev + 1);
 };
 
-  useEffect(() => { const unSubscribe = onAuthStateChanged(auth, (currentUser) => 
-    { setUser(currentUser); 
-      setLoading(false) })
-       return () => { unSubscribe(); } },
-        [])
+    useEffect(() => {
+        const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                // Fetch additional user data (like role) from backend using the cookie
+                try {
+                    const res = await fetch("http://localhost:5000/api/users/profile", {
+                        credentials: "include"
+                    });
+                    if (res.ok) {
+                        const backendData = await res.json();
+                        setUser({ ...currentUser, ...backendData });
+                    } else {
+                        setUser(currentUser);
+                    }
+                } catch (err) {
+                    console.error("Backend fetch error:", err);
+                    setUser(currentUser);
+                }
+            } else {
+                setUser(null);
+            }
+            setLoading(false);
+        });
+        return () => { unSubscribe(); };
+    }, []);
 
 
 

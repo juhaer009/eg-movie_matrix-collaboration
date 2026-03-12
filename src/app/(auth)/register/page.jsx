@@ -108,7 +108,8 @@ const RegisterPage = () => {
 
       const result = await response.json();
       console.log("Registered successfully:", result);
-      router.push("/login");
+      // Cookies are set automatically by the backend
+      router.push("/dashboard");
     } catch (err) {
       console.error(err);
       setError(err.message || "An error occurred during registration");
@@ -139,8 +140,7 @@ const RegisterPage = () => {
       }
 
       const data = await response.json();
-      if (data.token) {
-        localStorage.setItem("auth_token", data.token);
+      if (data.user) {
         router.push("/");
       }
     } catch (error) {
