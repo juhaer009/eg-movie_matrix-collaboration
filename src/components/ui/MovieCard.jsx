@@ -2,6 +2,7 @@ import Image from "next/image";
 import MovieCardBtn from "./MovieCardBtn";
 
 export default function MovieCard({ movie }) {
+  console.log("Rendering MovieCard for:", movie);
   return (
     <div className="group relative w-80 rounded-2xl overflow-hidden bg-zinc-900 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
       {/* Image Section */}
@@ -37,9 +38,7 @@ export default function MovieCard({ movie }) {
             ${typeof movie.price === 'number' ? movie.price.toFixed(2) : movie.price}
           </span>
 
-          <MovieCardBtn id={movie._id}  title={movie.title} 
-        poster={movie.image} 
-      duration={Number(movie.duration)}  initialWatchlistStatus={movie.watchlistStatus} />  
+         <MovieCardBtn id={movie._id} initialWatchlistStatus={movie.watchlistStatus} />    
         </div>
       </div>
     </div>

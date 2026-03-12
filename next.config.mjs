@@ -52,14 +52,6 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "images4.alphacoders.com",
-      },
-      {
-        protocol: "https",
-        hostname: "github.com",
-      },
-      {
-        protocol: "https",
         hostname: "image.tmdb.org",
       },
     ],
