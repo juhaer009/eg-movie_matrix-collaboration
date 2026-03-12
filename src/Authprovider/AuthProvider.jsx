@@ -7,7 +7,9 @@ import { auth } from '../firbase';
 const AuthProvider = ({ children }) => {
     const provider = new GoogleAuthProvider();
     const [loding, setLoading] = useState(true)
-    const [user, setUser] = useState(true)
+
+const [user, setUser] = useState(null);
+const [moviesWatched, setMoviesWatched] = useState(0);
 
     const GoogleSignIN = () => {
         setLoading(true);
@@ -24,29 +26,28 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signInWithEmailAndPassword(auth, email, password)
     }
-    const Updateprofile = async (profile) => {
-        if (!auth.currentUser) return;
 
-        await updateProfile(auth.currentUser, profile);
+   
 
-        // optional: updated user set করা
-        setUser({ ...auth.currentUser });
-    };
-    const forgotPassword = (email) => {
-        return sendPasswordResetEmail(auth, email);
-    }
+const Updateprofile = async (profile) => {
+   if (!auth.currentUser) return;
+    await updateProfile(auth.currentUser, profile); 
+   setUser({ ...auth.currentUser }); };
 
+const forgotPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
 
+  const incrementMoviesWatched = () => {
+  setMoviesWatched((prev) => prev + 1);
+};
 
-    useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false)
-        })
-        return () => {
-            unSubscribe();
-        }
-    }, [])
+  useEffect(() => { const unSubscribe = onAuthStateChanged(auth, (currentUser) => 
+    { setUser(currentUser); 
+      setLoading(false) })
+       return () => { unSubscribe(); } },
+        [])
+
 
 
     const authInfo = {
@@ -58,15 +59,14 @@ const AuthProvider = ({ children }) => {
         registerUser,
         signInUser,
         Updateprofile,
-        forgotPassword
-
+        forgotPassword,
+        incrementMoviesWatched,
+        moviesWatched
     }
     return (
-        <AuthContext value={authInfo}>
-            {
-                children
-            }
-        </AuthContext>
+        <AuthContext.Provider value={authInfo}>
+  {children}
+</AuthContext.Provider>
     );
 };
 
