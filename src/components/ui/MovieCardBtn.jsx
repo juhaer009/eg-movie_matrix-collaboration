@@ -1,7 +1,7 @@
 "use client";
+import useAuth from "@/hook/useauth";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import useAuth from "../../hook/useauth";
 
 const MovieCardBtn = ({
   id,
@@ -124,7 +124,7 @@ const MovieCardBtn = ({
         </Link>
       )}
       {showBookNow && (
-        <button className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">
+        <button className="bg-indigo-600 hover:bg-indigo-500 px-2 py-2 rounded-xl text-sm font-medium transition-all duration-300">
           Book Now
         </button>
       )}
