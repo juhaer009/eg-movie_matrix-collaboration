@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +13,7 @@ export default function PaymentSuccessPage() {
           "http://localhost:5000/api/users/update-premium",
           {
             method: "POST",
-            credentials: "include", // important for JWT cookie
+            credentials: "include", // important for sending JWT cookie
           }
         );
 
@@ -20,7 +21,7 @@ export default function PaymentSuccessPage() {
 
         if (res.ok) {
           alert(data.message);
-          router.push("/profile"); // Go to profile to see premium badge
+          router.push("/profile");
         } else {
           alert(data.message || "Failed to upgrade premium");
         }
@@ -33,5 +34,9 @@ export default function PaymentSuccessPage() {
     upgradePremium();
   }, [router]);
 
-  return <div className="min-h-screen flex items-center justify-center text-white">Processing payment...</div>;
+  return (
+    <div className="min-h-screen flex items-center justify-center text-white">
+      Processing payment...
+    </div>
+  );
 }
