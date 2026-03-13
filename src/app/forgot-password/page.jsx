@@ -1,7 +1,5 @@
 
-
 "use client";
-
 import { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,21 +7,16 @@ import { ArrowLeft } from "lucide-react";
 import { AuthContext } from "@/Authcontex/AuthContext";
 
 export default function ForgotPasswordPage() {
-
   const { forgotPassword } = useContext(AuthContext); 
-
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setMessage("");
     setError("");
-
     try {
       await forgotPassword(email);
 
