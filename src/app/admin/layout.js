@@ -13,7 +13,7 @@ export default function AdminLayout({ children }) {
     <div className="min-h-screen bg-zinc-950 text-white selection:bg-netflix-red selection:text-white flex overflow-hidden">
       {/* Sidebar - Fixed/Overlay */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-
+        
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen relative overflow-hidden transition-all duration-300 lg:pl-64">
         {/* Navbar - Fixed */}

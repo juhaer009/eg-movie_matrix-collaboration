@@ -310,6 +310,22 @@ const Navbar = () => {
             </Link>
           )}
 
+          {user && userRole=="admin" && (
+            <Link
+              href="/admin"
+              className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                isActive("/admin")
+                  ? "text-white"
+                  : "text-gray-300 hover:text-white"
+              }`}
+            >
+              {isActive("/admin") && (
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full -z-10 animate-pulse"></span>
+              )}
+               Admin Panel
+            </Link>
+          )}
+
           {/* Role Based */}
           {/* {isLoggedIn && role === "admin" && (
             <Link
@@ -336,6 +352,7 @@ const Navbar = () => {
               Dashboard
             </Link>
           )} */}
+
         </div>
 
         {/* Auth Buttons */}

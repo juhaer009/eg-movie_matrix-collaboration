@@ -1,3 +1,6 @@
+
+"use client"
+
 import { useEffect, useState } from "react";
 import useAuth from "./useauth";
 const useRole = () => {
@@ -7,7 +10,6 @@ const useRole = () => {
 
   useEffect(() => {
     if (!user?.email) return;
-
     const fetchUserRole = async () => {
       setLoading(true);
       try {
@@ -31,6 +33,6 @@ const useRole = () => {
 
   const role = userRole?.role || null;
   const photoUrl = userRole?.photoURL || null;
-  return { role, photoUrl};
+  return { role, photoUrl , loading};
 };
 export default useRole;

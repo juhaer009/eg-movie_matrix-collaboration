@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Star, Github } from "lucide-react";
@@ -16,9 +16,10 @@ import useRole from "@/hook/useRole";
 const RegisterPage = () => {
   const { GoogleSignIN, registerUser } = useAuth();
   const router = useRouter();
-  const {role}=useRole()
+  const { role , loading:Loading } = useRole();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [registered, setRegistered] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,6 +27,19 @@ const RegisterPage = () => {
     password: "",
     image: null,
   });
+
+useEffect(() => {
+  if (registered && !Loading) {
+    if (role === "admin") {
+      router.push("/admin");
+    }
+
+    if (role === "user") {
+      router.push("/dashboard");
+    }
+  }
+}, [registered, role, Loading, router]);
+
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -93,7 +107,7 @@ const RegisterPage = () => {
       const firebaseUser = userCredential.user;
 
       console.log("Firebase user:", firebaseUser);
-      
+
       // 3️⃣ send data to backend
       const response = await fetch("http://localhost:5000/api/users/register", {
         method: "POST",
@@ -115,18 +129,22 @@ const RegisterPage = () => {
         const errorData = await response.json();
         throw new Error(errorData.message || "Backend registration failed");
       }
-
       const result = await response.json();
-      // console.log("Backend response:", result);
 
+      // if(Loading && role) {
+      //   if(role === "admin") {
+      //     router.push("/admin");
+      //     return;
+      //   }
+      //   if(role === "user") {
+      //     router.push("/dashboard");
+      //     return;
+      //   }
+      // }
 
-      // 4️⃣ redirect
-      if(role==="user"){
-        router.push("/dashboard");
-      }
-      if(role==="admin"){
-        router.push("/admin");
-      }
+      // router.push("/dashboard");
+      
+      setRegistered(true);
 
     } catch (err) {
       console.error(err);
@@ -385,3 +403,6 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
+
+
