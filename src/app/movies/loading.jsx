@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function MoviesLoading() {
+export default function Loading() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -20,36 +20,67 @@ export default function MoviesLoading() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black flex flex-col items-center justify-center text-white">
-      <div className="relative flex items-center justify-center">
-        <div className="absolute w-64 h-64 bg-blue-500 rounded-full blur-3xl opacity-30 animate-pulse"></div>
-        <h1 className="text-4xl font-bold tracking-widest z-10">
-          Loading Movies...
-        </h1>
-      </div>
+    <div className="fixed inset-0 flex items-center justify-center text-white overflow-hidden">
 
-      <p className="mt-6 text-lg text-blue-300 animate-pulse">
-        Fetching the latest collection for you
-      </p>
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center blur-md scale-110"
+        style={{
+          backgroundImage:
+            "url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba)",
+        }}
+      />
 
-      <div className="w-80 h-3 bg-blue-800 rounded-full mt-8 overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-blue-400 to-blue-200 transition-all duration-200"
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
+      {/* CONTENT */}
+      <div className="relative z-10 flex flex-col items-center text-center animate-fadeIn">
 
-      <p className="mt-2 text-sm text-blue-400">{progress}%</p>
+        {/* Logo */}
+        <div className="relative flex items-center justify-center">
 
-      {/* Movie Grid Skeleton */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12 px-4">
-        {[...Array(8)].map((_, index) => (
+          <div className="absolute w-64 h-64 bg-red-500 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+
+          <h1 className="text-6xl font-extrabold tracking-widest animate-[pulse_3s_infinite]">
+
+            <span className="text-white">Movie</span>
+
+            <span className="text-red-500 drop-shadow-[0_0_10px_red]">
+              Matrix
+            </span>
+
+          </h1>
+
+        </div>
+
+        {/* AI Text */}
+        <p className="mt-6 text-lg text-gray-200 animate-pulse">
+          AI is analyzing your cinematic experience...
+        </p>
+
+        {/* Progress Bar */}
+        <div className="w-80 h-3 bg-white/20 rounded-full mt-8 overflow-hidden backdrop-blur-sm">
+
           <div
-            key={index}
-            className="bg-blue-900/30 rounded-lg h-64 animate-pulse"
-          ></div>
-        ))}
+            className="h-full bg-gradient-to-r from-red-500 via-red-400 to-red-600 shadow-[0_0_15px_red] transition-all duration-200"
+            style={{ width: `${progress}%` }}
+          />
+
+        </div>
+
+        <p className="mt-2 text-sm text-gray-200">{progress}%</p>
+
       </div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden">
+
+        <div className="w-2 h-2 bg-red-400 rounded-full absolute top-10 left-10 animate-bounce"></div>
+
+        <div className="w-3 h-3 bg-red-300 rounded-full absolute bottom-20 right-20 animate-ping"></div>
+
+        <div className="w-2 h-2 bg-red-500 rounded-full absolute top-1/3 right-1/4 animate-pulse"></div>
+
+      </div>
+
     </div>
   );
 }
