@@ -88,17 +88,18 @@ export default function ProfilePage() {
   if (!user) return <Loading />;
 
   return (
-    <div className="min-h-screen relative flex justify-center items-start pt-32 pb-20 px-4 overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center blur-md scale-110"
-        style={{
-          backgroundImage:
-            "url(https://png.pngtree.com/background/20250102/original/pngtree-dark-textured-background-in-stone-or-concrete-black-or-charcoal-gray-picture-image_15316932.jpg)",
-        }}
-      />
+    <motion.div>
+      <main className="min-h-screen relative flex justify-center items-start pt-32 pb-20 px-4 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center blur-md scale-110"
+          style={{
+            backgroundImage:
+              "url(https://png.pngtree.com/background/20250102/original/pngtree-dark-textured-background-in-stone-or-concrete-black-or-charcoal-gray-picture-image_15316932.jpg)",
+          }}
+        />
 
-      <div className="relative z-10 w-full max-w-6xl">
-        <div className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 text-white relative">
+        <div className="relative z-10 w-full max-w-6xl">
+          <div className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 text-white relative">
           <div className="flex flex-col md:flex-row gap-8">
             {/* LEFT SIDE: Profile */}
             <div className="flex flex-col items-center text-center md:border-r border-white/20 md:pr-8">
@@ -147,19 +148,18 @@ export default function ProfilePage() {
 
               <div className="mt-6 flex flex-col gap-4 w-full">
                 {editing ? (
-                  <Button
-                    onClick={handleUpdate}
-                    className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                  >
-                    Save Profile
-                  </Button>
-
-                  {editing && (
+                  <>
+                    <Button
+                      onClick={handleUpdate}
+                      className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                    >
+                      Save Profile
+                    </Button>
                     <Button variant="ghost" onClick={() => setEditing(false)} className="text-slate-400 hover:text-white">
                       Cancel
                     </Button>
-                  )}
-
+                  </>
+                ) : (
                   <Button
                     onClick={() => setEditing(true)}
                     className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
@@ -253,10 +253,11 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
-            </section>
+            </div>
           </div>
-        </motion.div>
-      </main>
-    </div>
+        </div>
+      </div>
+    </main>
+    </motion.div>
   );
 }
