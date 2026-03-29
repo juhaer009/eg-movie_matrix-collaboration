@@ -8,7 +8,7 @@ const MovieCardBtn = ({
   initialWatchlistStatus = false,
   variant = "card",
   showDetails = true,
-  showBookNow = true,
+  
 }) => {
   const { user, loading: authLoading } = useAuth(); // fixed typo
   const [isInWatchlist, setIsInWatchlist] = useState(initialWatchlistStatus);
@@ -123,11 +123,7 @@ const MovieCardBtn = ({
           Details
         </Link>
       )}
-      {showBookNow && (
-        <button className="bg-indigo-600 hover:bg-indigo-500 px-2 py-2 rounded-xl text-sm font-medium transition-all duration-300">
-          Book Now
-        </button>
-      )}
+      
     </div>
   );
 };

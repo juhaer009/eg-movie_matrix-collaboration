@@ -63,7 +63,7 @@ const Movies = () => {
         ) : (
           <div className="grid grid-cols-1 my-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {movies.map((movie, index) => (
-              <MovieCard key={movie._id || index} movie={movie}></MovieCard>
+              <MovieCard key={movie._id || index} id={movie._id} movie={movie}   ></MovieCard>
             ))}
           </div>
         )}
