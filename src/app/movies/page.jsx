@@ -11,7 +11,7 @@ const Movies = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch("http://localhost:5000/movies");
+        const res = await fetch("https://movie-matrix-server-one.vercel.app/movies");
         if (!res.ok) throw new Error("Failed to fetch movies");
 
         const data = await res.json();
@@ -63,7 +63,7 @@ const Movies = () => {
         ) : (
           <div className="grid grid-cols-1 my-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {movies.map((movie, index) => (
-              <MovieCard key={movie._id || index} movie={movie}></MovieCard>
+              <MovieCard key={movie._id || index} id={movie._id} movie={movie}   ></MovieCard>
             ))}
           </div>
         )}

@@ -13,7 +13,8 @@ import {
     BarChart3,
     Settings,
     LogOut,
-    User
+    User,
+    Heart
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hook/useauth";
@@ -34,6 +35,8 @@ const userItems = [
     { icon: LayoutDashboard, label: "My Dashboard", href: "/dashboard" },
     { icon: Bookmark, label: "Watchlist", href: "/dashboard/watchlist" },
     { icon: Star, label: "My Ratings", href: "/dashboard/ratings" },
+     { icon: Bookmark, label: "Series Watchlist", href: "/dashboard/series-watchlist" },
+    { icon: Heart, label: "Favorites", href: "/dashboard/favorites" },
     { icon: User, label: "Profile", href: "/profile" },
     { icon: Settings, label: "Settings", href: "/profile/settings" },
 ];

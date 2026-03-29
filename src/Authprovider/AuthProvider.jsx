@@ -47,12 +47,17 @@ const forgotPassword = (email) => {
             if (currentUser) {
                 // Fetch additional user data (like role) from backend using the cookie
                 try {
-                    const res = await fetch("http://localhost:5000/api/users/profile", {
+                    const res = await fetch("https://movie-matrix-server-one.vercel.app/api/users/profile", {
                         credentials: "include"
                     });
                     if (res.ok) {
-                        const backendData = await res.json();
-                        setUser({ ...currentUser, ...backendData });
+                        const contentLength = res.headers.get('content-length');
+                        if (contentLength && parseInt(contentLength) > 0) {
+                            const backendData = await res.json();
+                            setUser({ ...currentUser, ...backendData });
+                        } else {
+                            setUser(currentUser);
+                        }
                     } else {
                         setUser(currentUser);
                     }

@@ -13,7 +13,7 @@ import useAuth from '@/hook/useauth';
 import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
-  const { GoogleSignIN, registerUser, Updateprofile } = useAuth();
+  const { GoogleSignIN } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -76,22 +76,12 @@ const RegisterPage = () => {
         photoURL = await uploadToImageBB(formData.image);
       }
 
-      // 1. Create User in Firebase
-      await registerUser(formData.email, formData.password);
-      
-      // 2. Update Firebase Profile with Name and Photo
-      await Updateprofile({
-        displayName: `${formData.firstName} ${formData.lastName}`,
-        photoURL: photoURL
-      });
-
-      // 3. Save to Backend Database
-      const response = await fetch("http://localhost:5000/api/users/register", {
+      const response = await fetch("https://movie-matrix-server-one.vercel.app/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Required to receive and send cookies (auth_token)
+        credentials: "include", 
         body: JSON.stringify({
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
@@ -108,8 +98,7 @@ const RegisterPage = () => {
 
       const result = await response.json();
       console.log("Registered successfully:", result);
-      // Cookies are set automatically by the backend
-      router.push("/dashboard");
+      router.push("/");
     } catch (err) {
       console.error(err);
       setError(err.message || "An error occurred during registration");
@@ -123,7 +112,7 @@ const RegisterPage = () => {
       const result = await GoogleSignIN();
       const user = result.user;
 
-      const response = await fetch("http://localhost:5000/api/users/social-login", {
+      const response = await fetch("https://movie-matrix-server-one.vercel.app/api/users/social-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,7 +129,8 @@ const RegisterPage = () => {
       }
 
       const data = await response.json();
-      if (data.user) {
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token);
         router.push("/");
       }
     } catch (error) {
