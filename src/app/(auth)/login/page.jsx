@@ -39,7 +39,7 @@ const LoginPage = () => {
       await signInUser(formData.email, formData.password);
 
       // 2. Validate with Backend (for JWT and Roles)
-      const response = await fetch("http://localhost:5000/api/users/login", {
+      const response = await fetch("https://movie-matrix-server-one.vercel.app/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,16 +57,9 @@ const LoginPage = () => {
       }
 
       const result = await response.json();
-      if (result.token) {
-        localStorage.setItem("auth_token", result.token);
-
-        const role = getRoleFromToken(result.token);
-        if (role === 'admin') {
-          router.push("/admin");
-        } else {
-          router.push("/dashboard");
-        }
-      } else {
+      if (result.user) {
+        // We no longer use localStorage. The browser handles the cookie automatically.
+        const role = result.user.role;
         router.push("/");
       }
     } catch (err) {
@@ -83,7 +76,7 @@ const LoginPage = () => {
       const user = result.user;
 
       // Notify backend about social login
-      const response = await fetch("http://localhost:5000/api/users/social-login", {
+      const response = await fetch("https://movie-matrix-server-one.vercel.app/api/users/social-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,9 +93,8 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
-      if (data.token) {
-        localStorage.setItem("auth_token", data.token);
-        const role = getRoleFromToken(data.token);
+      if (data.user) {
+        const role = data.user.role;
         if (role === 'admin') {
           router.push("/admin");
         } else {

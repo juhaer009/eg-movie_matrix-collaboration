@@ -40,7 +40,7 @@
 //     const title = movie.title || "Unknown Title";
 
 //     try {
-//       const res = await fetch("http://localhost:5000/watch-movie", {
+//       const res = await fetch("https://movie-matrix-server-one.vercel.app/watch-movie", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({
@@ -155,7 +155,7 @@ export default function MovieCard({ movie, onWatch }) {
     const title = movie.title || "Unknown Title";
 
     try {
-      const res = await fetch("http://localhost:5000/watch-movie", {
+      const res = await fetch("https://movie-matrix-server-one.vercel.app/watch-movie", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

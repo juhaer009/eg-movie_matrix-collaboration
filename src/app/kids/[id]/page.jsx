@@ -12,7 +12,7 @@ export default function KidsDetailPage() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/kids/${id}`);
+        const res = await fetch(`https://movie-matrix-server-one.vercel.app/api/kids/${id}`);
         if (!res.ok) throw new Error("Movie not found");
         const data = await res.json();
         setMovie(data);

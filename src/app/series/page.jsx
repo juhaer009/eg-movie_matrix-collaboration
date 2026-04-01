@@ -17,7 +17,7 @@ const SeriesPage = () => {
   useEffect(() => {
     const fetchSeries = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/series");
+        const res = await fetch("https://movie-matrix-server-one.vercel.app/api/series");
         if (!res.ok) throw new Error("Failed to fetch series");
         const data = await res.json();
         setSeriesData(data);

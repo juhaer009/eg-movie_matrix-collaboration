@@ -1,20 +1,11 @@
 "use client";
 
 import { Bell, Search, User, ChevronDown, Menu } from "lucide-react";
-import { useEffect, useState } from "react";
-import { getRoleFromToken } from "@/lib/auth";
 import useAuth from "@/hook/useauth";
 
 export default function AdminNavbar({ onMenuClick }) {
     const { user } = useAuth();
-    const [role, setRole] = useState(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem("auth_token");
-        if (token) {
-            setRole(getRoleFromToken(token));
-        }
-    }, [user]);
+    const role = user?.role || null;
 
     return (
         <header className="h-14 border-b border-zinc-800 bg-zinc-950 px-4 md:px-8 flex items-center justify-between sticky top-0 z-30 w-full">

@@ -9,7 +9,7 @@ export default function SeriesDetailsPage() {
   const [series, setSeries] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/series/${id}`)
+    fetch(`https://movie-matrix-server-one.vercel.app/api/series/${id}`)
       .then((res) => res.json())
       .then((data) => setSeries(data))
       .catch((err) => console.log(err));

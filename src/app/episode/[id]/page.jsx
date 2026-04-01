@@ -21,18 +21,18 @@ export default function EpisodePage() {
         setLoading(true);
 
         
-        const res = await fetch(`http://localhost:5000/api/episode/${id}`);
+        const res = await fetch(`https://movie-matrix-server-one.vercel.app/api/episode/${id}`);
         if (!res.ok) throw new Error("Failed to fetch episode");
         const data = await res.json();
         setEpisode(data);
 
         
-        const favRes = await fetch("http://localhost:5000/api/favourites", { credentials: "include" });
+        const favRes = await fetch("https://movie-matrix-server-one.vercel.app/api/favourites", { credentials: "include" });
         const favData = await favRes.json();
         setIsFavourite(favData?.some(f => f.movieId === data?.seriesId));
 
         
-        const ratingRes = await fetch("http://localhost:5000/api/ratings", { credentials: "include" });
+        const ratingRes = await fetch("https://movie-matrix-server-one.vercel.app/api/ratings", { credentials: "include" });
         const ratingData = await ratingRes.json();
         const userRating = ratingData?.find(r => r.movieId === data?._id);
         setRating(userRating?.rating || 0);
@@ -54,7 +54,7 @@ export default function EpisodePage() {
   // Toggle favourite
   const toggleFavourite = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/favourites", {
+      const res = await fetch("https://movie-matrix-server-one.vercel.app/api/favourites", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -71,7 +71,7 @@ export default function EpisodePage() {
 
   const handleRating = async (newRating) => {
     try {
-      const res = await fetch("http://localhost:5000/api/ratings", {
+      const res = await fetch("https://movie-matrix-server-one.vercel.app/api/ratings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -94,7 +94,7 @@ export default function EpisodePage() {
       <video
         src={`http://localhost:5000${episode.video}`}
         controls
-        poster={episode.image ? `http://localhost:5000/${episode.image}` : "/placeholder.png"}
+        poster={episode.image ? `https://movie-matrix-server-one.vercel.app/${episode.image}` : "/placeholder.png"}
         className="w-full max-h-[500px] md:max-h-[600px] rounded-lg mb-4"
       />
 

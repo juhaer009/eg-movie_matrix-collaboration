@@ -14,7 +14,7 @@ export default function KidsPage() {
   useEffect(() => {
   const fetchKidsMovies = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/kids");
+      const res = await fetch("https://movie-matrix-server-one.vercel.app/api/kids");
       const data = await res.json();
       console.log("Fetched kidsMovies:", data);
       setKidsMovies(data || []);

@@ -20,7 +20,7 @@ const EpisodeWatchlistBtn = ({ seriesId, seasonNumber, episodeId }) => {
 
       setIsCheckingStatus(true);
       try {
-        const response = await fetch(`http://localhost:5000/api/series-watchlist/${user.uid}`);
+        const response = await fetch(`https://movie-matrix-server-one.vercel.app/api/series-watchlist/${user.uid}`);
         if (response.ok) {
           const data = await response.json();
           const isEpisodeInWatchlist = data.watchlist.some(item =>
@@ -51,7 +51,7 @@ const EpisodeWatchlistBtn = ({ seriesId, seasonNumber, episodeId }) => {
     const method = previousState ? "DELETE" : "POST";
 
     try {
-      const response = await fetch(`http://localhost:5000/api/series-watchlist`, {
+      const response = await fetch(`https://movie-matrix-server-one.vercel.app/api/series-watchlist`, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

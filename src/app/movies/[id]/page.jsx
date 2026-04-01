@@ -21,7 +21,7 @@ export default function MovieDetailsPage() {
   useEffect(() => {
     async function fetchMovie() {
       try {
-        const res = await fetch(`http://localhost:5000/movies/${id}`);
+        const res = await fetch(`https://movie-matrix-server-one.vercel.app/movies/${id}`);
 
         if (!res.ok) throw new Error("Movie not found");
 
@@ -44,7 +44,7 @@ const handleFavorite = async () => {
   const movieId = movie._id || movie.id;
 
   try {
-    await fetch("http://localhost:5000/api/favourites", {
+    await fetch("https://movie-matrix-server-one.vercel.app/api/favourites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -7,9 +7,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
-import { getRoleFromToken } from "@/lib/auth";
-import useAuth from "@/hook/useauth";
 import { cn } from "@/lib/utils";
+import useAuth from "@/hook/useauth";
 import Logo from "@/components/Logo";
 
 const Navbar = () => {
@@ -20,7 +19,6 @@ const Navbar = () => {
 
   const isDashboard = pathname?.startsWith("/dashboard") || pathname?.startsWith("/admin");
 
-  const [role, setRole] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -31,21 +29,12 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  // Still need to detect role from the JWT token if present
-  useEffect(() => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem("auth_token") : null;
-    if (token) {
-      const userRole = getRoleFromToken(token);
-      setRole(userRole);
-    } else {
-      setRole(null);
-    }
-  }, [user, pathname]);
+  // Role is handled by AuthContext
+  const role = user?.role || null;
 
   useEffect(() => {
     gsap.fromTo(
@@ -56,7 +45,6 @@ const Navbar = () => {
   }, [pathname]);
 
   const handleLogout = () => {
-    localStorage.removeItem("auth_token");
     GoogleSignOut();
     router.push("/");
   };
@@ -121,7 +109,7 @@ const Navbar = () => {
               onMouseLeave={() => setDropdownOpen(false)}
             >
               <Avatar className="h-9 w-9 border-2 border-transparent hover:border-primary transition-all cursor-pointer overflow-hidden ring-1 ring-white/10">
-                <AvatarImage src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"} alt={user?.displayName || "User"} />
+                <AvatarImage src={user?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || "Felix"}`} alt={user?.displayName || "User"} />
                 <AvatarFallback className="bg-primary text-white font-bold text-xs">
                   {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
                 </AvatarFallback>

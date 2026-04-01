@@ -76,7 +76,7 @@ const RegisterPage = () => {
         photoURL = await uploadToImageBB(formData.image);
       }
 
-      const response = await fetch("http://localhost:5000/api/users/register", {
+      const response = await fetch("https://movie-matrix-server-one.vercel.app/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,16 +107,40 @@ const RegisterPage = () => {
     }
   };
 
-  const RegWithGoogle = () => {
-    GoogleSignIN()
-      .then((result) => {
-        router.push('/');
-      })
-      .catch((error) => {
-        if (error.code === 'auth/popup-closed-by-user') {
-          window.location.reload();
-        }
+  const RegWithGoogle = async () => {
+    try {
+      const result = await GoogleSignIN();
+      const user = result.user;
+
+      const response = await fetch("https://movie-matrix-server-one.vercel.app/api/users/social-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to sync social login");
+      }
+
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token);
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Google Register Error:", error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        window.location.reload();
+      } else {
+        setError("Social login failed.");
+      }
+    }
   };
 
   return (
