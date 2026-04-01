@@ -45,6 +45,7 @@ export default function EpisodePage() {
       }
     };
 
+  
     fetchEpisode();
   }, [id]);
 
@@ -132,3 +133,4 @@ export default function EpisodePage() {
     </div>
   );
 }
+
