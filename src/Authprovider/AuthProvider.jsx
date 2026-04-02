@@ -42,11 +42,36 @@ const forgotPassword = (email) => {
   setMoviesWatched((prev) => prev + 1);
 };
 
-  useEffect(() => { const unSubscribe = onAuthStateChanged(auth, (currentUser) => 
-    { setUser(currentUser); 
-      setLoading(false) })
-       return () => { unSubscribe(); } },
-        [])
+    useEffect(() => {
+        const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                // Fetch additional user data (like role) from backend using the cookie
+                try {
+                    const res = await fetch("https://movie-matrix-server-one.vercel.app/api/users/profile", {
+                        credentials: "include"
+                    });
+                    if (res.ok) {
+                        const contentLength = res.headers.get('content-length');
+                        if (contentLength && parseInt(contentLength) > 0) {
+                            const backendData = await res.json();
+                            setUser({ ...currentUser, ...backendData });
+                        } else {
+                            setUser(currentUser);
+                        }
+                    } else {
+                        setUser(currentUser);
+                    }
+                } catch (err) {
+                    console.error("Backend fetch error:", err);
+                    setUser(currentUser);
+                }
+            } else {
+                setUser(null);
+            }
+            setLoading(false);
+        });
+        return () => { unSubscribe(); };
+    }, []);
 
 
 

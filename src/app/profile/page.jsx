@@ -1,8 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Camera,
+  Mail,
+  Calendar,
+  Star,
+  PlayCircle,
+  Clock,
+  Cpu,
+  Edit3,
+  Save,
+  X
+} from "lucide-react";
 import Loading from "../loading";
 import useAuth from "@/hook/useauth";
 import { useRouter } from "next/navigation";
@@ -55,10 +68,9 @@ export default function ProfilePage() {
         setName(mergedUser.displayName);
         setPhoto(mergedUser.photoURL);
       } catch (err) {
-        console.error(err);
+        console.error("Profile Fetch Error:", err);
       }
     };
-
     fetchUser();
   }, [authUser]);
 
@@ -69,7 +81,7 @@ export default function ProfilePage() {
       setUser((prev) => ({ ...prev, displayName: name, photoURL: photo }));
       setEditing(false);
     } catch (err) {
-      console.error(err);
+      console.error("Update Error:", err);
     }
   };
 
@@ -253,6 +265,7 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
+    </motion.div>
   );
 }

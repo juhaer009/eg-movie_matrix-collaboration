@@ -14,7 +14,7 @@ export default function DashboardSeriesWatchlist() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`http://localhost:5000/api/series-watchlist/${user.uid}`);
+        const res = await fetch(`https://movie-matrix-server-one.vercel.app/api/series-watchlist/${user.uid}`);
         const result = await res.json();
         setData(result.watchlist || []);
       } catch (err) {

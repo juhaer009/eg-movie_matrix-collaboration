@@ -163,6 +163,24 @@ const handleRegister = async (e) => {
           window.location.reload();
         }
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to sync social login");
+      }
+
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token);
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Google Register Error:", error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        window.location.reload();
+      } else {
+        setError("Social login failed.");
+      }
+    }
   };
 
   return (
