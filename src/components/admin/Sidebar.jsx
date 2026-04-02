@@ -18,7 +18,7 @@ import {
     Clock
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getRoleFromToken } from "@/lib/auth";
+import useAuth from "@/hook/useauth";
 import Logo from "@/components/Logo";
 
 const adminItems = [
@@ -45,19 +45,13 @@ const userItems = [
 
 export default function Sidebar({ isOpen, onClose }) {
     const pathname = usePathname();
-    const [role, setRole] = useState(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem("auth_token");
-        if (token) {
-            setRole(getRoleFromToken(token));
-        }
-    }, []);
+    const { user, GoogleSignOut } = useAuth();
+    const role = user?.role || null;
 
     const menuItems = role === "admin" ? adminItems : userItems;
 
     const handleLogout = () => {
-        localStorage.removeItem("auth_token");
+        GoogleSignOut();
         window.location.href = "/login";
     };
 

@@ -9,7 +9,7 @@ export default function Rating({ movieId }) {
   useEffect(() => {
     const fetchRating = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/ratings", {
+        const res = await fetch("https://movie-matrix-server-one.vercel.app/api/ratings", {
           credentials: "include",
         });
 
@@ -33,7 +33,7 @@ export default function Rating({ movieId }) {
     setRating(value);
 
     try {
-      await fetch("http://localhost:5000/api/ratings", {
+      await fetch("https://movie-matrix-server-one.vercel.app/api/ratings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

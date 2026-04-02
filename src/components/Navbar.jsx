@@ -267,9 +267,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
-import { getRoleFromToken } from "@/lib/auth";
-import useAuth from "@/hook/useauth";
 import { cn } from "@/lib/utils";
+import useAuth from "@/hook/useauth";
 import Logo from "@/components/Logo";
 
 const Navbar = () => {
@@ -290,7 +289,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
@@ -316,7 +314,6 @@ const Navbar = () => {
   }, [pathname]);
 
   const handleLogout = () => {
-    localStorage.removeItem("auth_token");
     GoogleSignOut();
     router.push("/");
   };

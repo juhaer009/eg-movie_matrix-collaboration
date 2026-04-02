@@ -8,7 +8,7 @@ export default function RatingsPage() {
   useEffect(() => {
     const fetchRatings = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/ratings", {
+        const res = await fetch("https://movie-matrix-server-one.vercel.app/api/ratings", {
           credentials: "include",
         });
 

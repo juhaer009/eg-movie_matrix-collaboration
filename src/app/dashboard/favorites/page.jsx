@@ -12,18 +12,18 @@ export default function FavoritesPage() {
     async function fetchFavorites() {
       try {
         // 1️⃣ get all favourites
-        const favRes = await fetch("http://localhost:5000/api/favourites", {
+        const favRes = await fetch("https://movie-matrix-server-one.vercel.app/api/favourites", {
           credentials: "include",
         });
         const favs = await favRes.json();
         if (!favs.length) return setItems([]);
 
         // 2️⃣ get all movies
-        const movieRes = await fetch("http://localhost:5000/movies");
+        const movieRes = await fetch("https://movie-matrix-server-one.vercel.app/movies");
         const allMovies = await movieRes.json();
 
         // 3️⃣ get all series
-        const seriesRes = await fetch("http://localhost:5000/api/series");
+        const seriesRes = await fetch("https://movie-matrix-server-one.vercel.app/api/series");
         const allSeries = await seriesRes.json();
 
         // 4️⃣ match favourites
@@ -48,7 +48,7 @@ export default function FavoritesPage() {
   // Remove favourite
   const removeFavorite = async (item) => {
     const body = { movieId: item._id }; // movieId handles both movie and series
-    await fetch("http://localhost:5000/api/favourites", {
+    await fetch("https://movie-matrix-server-one.vercel.app/api/favourites", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

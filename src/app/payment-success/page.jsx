@@ -10,7 +10,7 @@ export default function PaymentSuccessPage() {
     const upgradePremium = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/users/update-premium",
+          "https://movie-matrix-server-one.vercel.app/api/users/update-premium",
           {
             method: "POST",
             credentials: "include", // important for sending JWT cookie
