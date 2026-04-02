@@ -1,8 +1,7 @@
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "../loading";
 
 export default function KidsPage() {
   const [kidsMovies, setKidsMovies] = useState([]);
@@ -35,22 +34,6 @@ export default function KidsPage() {
     fetchKidsMovies();
   }, []);
 
-  // Fetch Recently Viewed
-  useEffect(() => {
-    const fetchRecentlyViewed = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/recently-viewed", {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch recently viewed");
-        const data = await res.json();
-        setRecentlyViewed(data || []);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchRecentlyViewed();
-  }, []);
 
   // Filter movies by genre, mood, and search
   const filteredMovies = kidsMovies.filter((movie) => {
@@ -60,8 +43,7 @@ export default function KidsPage() {
     return genreMatch && moodMatch && searchMatch;
   });
 
-  if (loading)
-    return <p className="text-white text-center py-10">Loading movies...</p>;
+  if (loading) return <Loading/>;
 
   if (error)
     return <p className="text-red-500 text-center py-10">{error}</p>;
@@ -121,69 +103,70 @@ export default function KidsPage() {
           </button>
         ))}
       </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-7xl">
+  {filteredMovies.length > 0 ? (
+    filteredMovies.map((movie) => (
+      <div
+        key={movie._id}
+        className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:scale-105 transition-transform"
+      >
+        {/* Movie Image */}
+        <img
+          src={movie.image}
+          alt={movie.title}
+          className="w-full h-48 object-cover"
+        />
 
-      {/* MOVIES GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-7xl">
-        {filteredMovies.length > 0 ? (
-          filteredMovies.map((movie) => (
-            <div
-              key={movie._id}
-              className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:scale-105 transition-transform"
-            >
-              <img
-                src={movie.image}
-                alt={movie.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4 text-center space-y-2">
-                <h3 className="font-bold text-lg text-white">{movie.title}</h3>
-                <div className="flex justify-center gap-2 flex-wrap">
-                  {movie.genre.map((g, idx) => (
-                    <span
-                      key={idx}
-                      className="text-[10px] bg-blue-600/70 text-white px-2 py-1 rounded-full"
-                    >
-                      {g}
-                    </span>
-                  ))}
-                </div>
+        {/* Movie Info */}
+        <div className="p-4 text-center space-y-2">
+          <h3 className="font-bold text-lg text-white">{movie.title}</h3>
+          <div className="flex justify-center gap-2 flex-wrap">
+            {movie.genre.map((g, idx) => (
+              <span
+                key={idx}
+                className="text-[10px] bg-blue-600/70 text-white px-2 py-1 rounded-full"
+              >
+                {g}
+              </span>
+            ))}
+          </div>
 
-                {/* Play button */}
-                <button
-                  onClick={async () => {
-                    try {
-                      await fetch("http://localhost:5000/api/recently-viewed", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                        body: JSON.stringify({
-                          itemId: movie._id,
-                          type: "kids",
-                          title: movie.title,
-                          image: movie.image,
-                        }),
-                      });
-                      setRecentlyViewed((prev) => [
-                        { itemId: movie._id, type: "kids", title: movie.title, image: movie.image },
-                        ...prev.filter((i) => i.itemId !== movie._id),
-                      ].slice(0, 20));
-                    } catch (err) {
-                      console.error(err);
-                    }
-                    router.push(`/kids/${movie._id}`);
-                  }}
-                  className="mt-3 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl transition text-sm font-semibold"
-                >
-                  Play ▶
-                </button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-white col-span-full text-center py-10">No movies found.</p>
-        )}
+          {/* Play button always visible */}
+          <button
+            onClick={async () => {
+              try {
+                await fetch(`http://localhost:5000/api/view/kids/${movie._id}`, { method: "POST" });
+                await fetch("http://localhost:5000/api/recently-viewed", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  credentials: "include",
+                  body: JSON.stringify({
+                    itemId: movie._id,
+                    type: "kids",
+                    title: movie.title,
+                    image: movie.image,
+                  }),
+                });
+                setRecentlyViewed((prev) => [
+                  { itemId: movie._id, type: "kids", title: movie.title, image: movie.image },
+                  ...prev.filter((i) => i.itemId !== movie._id),
+                ].slice(0, 20));
+              } catch (err) {
+                console.error(err);
+              }
+              router.push(`/kids/${movie._id}`);
+            }}
+            className="mt-3 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl transition text-sm font-semibold"
+          >
+            ▶ Play
+          </button>
+        </div>
       </div>
-
+    ))
+  ) : (
+    <p className="text-white col-span-full text-center py-10">No movies found.</p>
+  )}
+</div>
       {/* RECENTLY VIEWED */}
       <div className="mt-10 w-full max-w-7xl">
         <h2 className="text-white text-2xl font-bold mb-4">🎬 Recently Watched</h2>

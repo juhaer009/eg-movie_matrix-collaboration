@@ -108,6 +108,10 @@ export default function SeriesDetailsPage() {
                   <button
                     onClick={async () => {
                       try {
+                         
+      await fetch(`http://localhost:5000/api/view/series/${ep._id}`, {
+        method: "POST",
+      });
                         // Post to recently viewed
                         await fetch("http://localhost:5000/api/recently-viewed", {
                           method: "POST",

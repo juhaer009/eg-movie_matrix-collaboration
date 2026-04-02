@@ -13,7 +13,8 @@ import useAuth from '@/hook/useauth';
 import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
-  const { GoogleSignIN } = useAuth();
+
+  const { registerUser, Updateprofile ,GoogleSignIN} = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -65,48 +66,93 @@ const RegisterPage = () => {
     }
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  // const handleRegister = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setError("");
 
-    try {
-      let photoURL = "";
-      if (formData.image) {
-        photoURL = await uploadToImageBB(formData.image);
-      }
+  //   try {
+  //     let photoURL = "";
+  //     if (formData.image) {
+  //       photoURL = await uploadToImageBB(formData.image);
+  //     }
 
-      const response = await fetch("http://localhost:5000/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", 
-        body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          password: formData.password,
-          photoURL: photoURL,
-          role: "user",
-        }),
-      });
+  //     const response = await fetch("http://localhost:5000/api/users/register", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: "include", 
+  //       body: JSON.stringify({
+  //         name: `${formData.firstName} ${formData.lastName}`,
+  //         email: formData.email,
+  //         password: formData.password,
+  //         photoURL: photoURL,
+  //         role: "user",
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Server error: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       const errorData = await response.json().catch(() => ({}));
+  //       throw new Error(errorData.message || `Server error: ${response.status}`);
+  //     }
 
-      const result = await response.json();
-      console.log("Registered successfully:", result);
-      router.push("/");
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "An error occurred during registration");
-    } finally {
-      setLoading(false);
+  //     const result = await response.json();
+  //     console.log("Registered successfully:", result);
+  //     router.push("/");
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError(err.message || "An error occurred during registration");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+const handleRegister = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
+
+  try {
+    let photoURL = "";
+
+    // ✅ Image upload
+    if (formData.image) {
+      photoURL = await uploadToImageBB(formData.image);
     }
-  };
 
+    // ✅ Firebase Register
+    const result = await registerUser(formData.email, formData.password);
+
+    // ✅ Update profile (VERY IMPORTANT 🔥)
+    await Updateprofile({
+      displayName: `${formData.firstName} ${formData.lastName}`,
+      photoURL: photoURL,
+    });
+
+    // ✅ (Optional) Backend save
+    await fetch("http://localhost:5000/api/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        photoURL,
+      }),
+    });
+
+    // ✅ Redirect
+    router.push("/");
+
+  } catch (err) {
+    console.error(err);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
   const RegWithGoogle = () => {
     GoogleSignIN()
       .then((result) => {

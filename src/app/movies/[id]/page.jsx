@@ -56,10 +56,16 @@ export default function MovieDetailsPage() {
     }
   };
 
-  const handleWatch = async () => {
+const handleWatch = async () => {
   setPlay(true);
 
   try {
+    
+    await fetch(`http://localhost:5000/api/view/movie/${movie._id}`, {
+      method: "POST",
+    });
+
+    // 🕒 2. Recently Viewed
     await fetch("http://localhost:5000/api/recently-viewed", {
       method: "POST",
       headers: {
@@ -67,17 +73,17 @@ export default function MovieDetailsPage() {
       },
       credentials: "include",
       body: JSON.stringify({
-        itemId: movie._id,    // must match movie._id
-        type: "movie",        
+        itemId: movie._id,
+        type: "movie",
         title: movie.title,
         image: movie.image,
       }),
     });
+
   } catch (err) {
-    console.error("Recent save error:", err);
+    console.error("Error:", err);
   }
 };
-
   // ⏳ Loading
   if (loading) {
     return (

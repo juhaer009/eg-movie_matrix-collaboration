@@ -1,46 +1,73 @@
+
+
+
+
 "use client";
+import React, { useEffect, useState } from "react";
+import { FaPlay } from "react-icons/fa";
 
-import React from "react";
-import MovieCard from "./MovieCard";
-
-const trendingData = [
-  {
-    title: "The Good Dinosaur",
-    image: "https://i.ibb.co.com/7VcP5Jk/images-1-1.jpg",
-  },
-  {
-    title: "Aladdin",
-    image: "https://i.ibb.co.com/Wpx2yJ81/aladinmovie.jpg"
-  },
-  {
-    title: "Raya and the Last Dragon",
-    image: "https://i.ibb.co.com/LXcfN8D7/images.jpg",
-  },
-  {
-    title: "Luca",
-    image: "https://i.ibb.co.com/LhHYn1d7/MV5-BMWMy-NGNl-ZTkt-ODVk-NS00-Zm-My-LTk0-Nm-Ut-NWVj-OWU1-MWMz-ZGMz-Xk-Ey-Xk-Fqc-Gc-V1.jpg",
-  },
-  {
-    title: "Tangled",
-    image: "https://i.ibb.co.com/DDbJsKc5/images-1.jpg",
-  },
-  {
-    title: "Coco",
-    image: "https://i.ibb.co.com/d0wssKZd/MV5-BMDIy-M2-E2-NTAt-Mzlh-Ny00-ZGUx-LWI1-Njgt-ZDY5-Mzhi-MDc5-NGU3-Xk-Ey-Xk-Fqc-Gc-V1-FMjpg-UX1000.jpg",
-  },
-];
 
 const TrendingMovies = () => {
-  return (
-    <section className="py-10 h- full">
-      <h2 className="text-3xl font-bold text-white mb-8">Trending Movies</h2>
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-      <div className="flex gap-6 overflow-x-auto pb-8 no-scrollbar scroll-smooth">
-        {trendingData.map((movie, index) => (
-          <MovieCard key={index} title={movie.title} image={movie.image} />
+  useEffect(() => {
+    fetch("http://localhost:5000/api/trending")
+      .then((res) => res.json())
+      .then((resData) => {
+        setData(resData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>loading...</p>;
+
+  const Card = ({ item }) => (
+    <div className="relative min-w-[180px] h-[260px] rounded-xl overflow-hidden group cursor-pointer">
+      <img
+        src={item.image}
+        alt={item.title}
+        className="w-full h-full object-cover"
+      />
+
+      {/* Hover Overlay */}
+      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+        <FaPlay className="text-red-600 text-3xl" />
+      </div>
+    </div>
+  );
+
+  const Section = ({ title, items }) => (
+    <div className="mb-10">
+      <h2 className="text-2xl font-bold text-white mb-4">{title}</h2>
+
+      <div className="flex gap-5 overflow-x-auto pb-4">
+        {items?.slice(0, 5).map((item) => (
+          <Card key={item._id} item={item} />
         ))}
       </div>
-    </section>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen px-6 py-10">
+      <h1 className="text-4xl font-bold text-white mb-10">
+         Trending & Popular
+      </h1>
+
+      <Section title=" Trending Movies" items={data?.movieTrending} />
+      <Section title=" Popular Movies" items={data?.moviePopular} />
+
+      <Section title=" Trending Series" items={data?.seriesTrending} />
+      <Section title=" Popular Series" items={data?.seriesPopular} />
+
+      <Section title=" Kids Trending" items={data?.kidsTrending} />
+      <Section title=" Kids Popular" items={data?.kidsPopular} />
+    </div>
   );
 };
 
