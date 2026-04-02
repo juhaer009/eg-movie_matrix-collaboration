@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { AuthContext } from '../Authcontex/AuthContext';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { auth } from '../firbase';
-
-const AuthProvider = ({ children }) => {
     const provider = new GoogleAuthProvider();
-    const [loding, setLoading] = useState(true)
+const AuthProvider = ({ children }) => {
+
+    const [loading, setLoading] = useState(true)
 
 const [user, setUser] = useState(null);
 const [moviesWatched, setMoviesWatched] = useState(0);
@@ -76,10 +76,11 @@ const forgotPassword = (email) => {
 
 
     const authInfo = {
+        
         user,
         GoogleSignIN,
         GoogleSignOut,
-        loding,
+        loading,
         setLoading,
         registerUser,
         signInUser,

@@ -14,7 +14,8 @@ import {
     Settings,
     LogOut,
     User,
-    Heart
+    Heart,
+    Clock
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hook/useauth";
@@ -34,6 +35,7 @@ const adminItems = [
 const userItems = [
     { icon: LayoutDashboard, label: "My Dashboard", href: "/dashboard" },
     { icon: Bookmark, label: "Watchlist", href: "/dashboard/watchlist" },
+    { icon: Clock, label: "Recently Viewed", href: "/dashboard/recently-viewed" },
     { icon: Star, label: "My Ratings", href: "/dashboard/ratings" },
      { icon: Bookmark, label: "Series Watchlist", href: "/dashboard/series-watchlist" },
     { icon: Heart, label: "Favorites", href: "/dashboard/favorites" },

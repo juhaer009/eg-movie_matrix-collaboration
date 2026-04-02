@@ -8,11 +8,11 @@ import Loading from "../loading";
 const SeriesPage = () => {
   const [seriesData, setSeriesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedGenre, setSelectedGenre] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedMood, setSelectedMood] = useState("All");
   const [openSeries, setOpenSeries] = useState(null);
-  const [selectedGenre, setSelectedGenre] = useState("All"); 
   const router = useRouter();
-
-  const genres = ["All", "Fantasy", "Sci-Fi", "Comedy", "Horror", "Romance", "Action", "Thriller"]; 
 
   useEffect(() => {
     const fetchSeries = async () => {
@@ -31,14 +31,17 @@ const SeriesPage = () => {
     fetchSeries();
   }, []);
 
-  const toggleSeries = (id) => {
-    setOpenSeries(openSeries === id ? null : id);
-  };
+  const genres = ["All", ...new Set(seriesData.flatMap((series) => series.genre || []))];
+  const moods = ["All", ...new Set(seriesData.flatMap((series) => series.mood || []))];
 
-  const filteredSeries =
-    selectedGenre === "All"
-      ? seriesData
-      : seriesData.filter((series) => series.genre?.includes(selectedGenre)); // ✅ Filtered series
+  const filteredSeries = seriesData.filter((series) => {
+    const genreMatch = selectedGenre === "All" || series.genre.includes(selectedGenre);
+    const moodMatch = selectedMood === "All" || series.mood?.includes(selectedMood);
+    const searchMatch = series.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return genreMatch && moodMatch && searchMatch;
+  });
+
+  const toggleSeries = (id) => setOpenSeries(openSeries === id ? null : id);
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-start pt-20 px-4">
@@ -64,21 +67,46 @@ const SeriesPage = () => {
             🎬 Drama <span className="text-blue-400">Series</span>
           </h1>
           <p className="text-sm md:text-base text-gray-300 opacity-80">
-            Explore the latest series and episodes
+            Explore your favorite series
           </p>
         </div>
 
+        {/* SEARCH + MOOD DROPDOWN */}
+        <div className="flex justify-center items-center gap-4 mt-4 flex-wrap">
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search series..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-4 py-2 rounded-lg w-full max-w-md focus:outline-none"
+          />
+
+          {/* Mood Dropdown */}
+          <select
+            value={selectedMood}
+            onChange={(e) => setSelectedMood(e.target.value)}
+            className="px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none"
+          >
+            {moods.map((mood) => (
+              <option key={mood} value={mood}>
+                {mood.charAt(0).toUpperCase() + mood.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* GENRE FILTER */}
-        <div className="flex flex-wrap gap-2 justify-center mb-6">
+        <div className="flex flex-wrap justify-center gap-3 mt-4">
           {genres.map((genre) => (
             <button
               key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+              className={`px-4 py-2 rounded-lg font-semibold transition ${
                 selectedGenre === genre
-                  ? "bg-blue-600 text-white"
-                  : "bg-white/10 text-gray-300 hover:bg-white/20"
+                  ? "bg-red-600 text-white"
+                  : "bg-gray-700 hover:bg-gray-600 text-gray-200"
               }`}
+              onClick={() => setSelectedGenre(genre)}
             >
               {genre}
             </button>
@@ -90,14 +118,15 @@ const SeriesPage = () => {
           <div className="my-10 w-full flex justify-center">
             <Loading />
           </div>
+        ) : filteredSeries.length === 0 ? (
+          <p className="text-white text-center mt-10">No series found.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredSeries.map((series) => ( // ✅ Use filteredSeries
+          <div className="grid grid-cols-1 my-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredSeries.map((series) => (
               <div
                 key={series._id}
                 className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:scale-105 transition-transform"
               >
-                {/* SERIES IMAGE */}
                 <img
                   src={series.image}
                   alt={series.title}
@@ -105,13 +134,9 @@ const SeriesPage = () => {
                 />
 
                 <div className="p-4 space-y-3">
-                  {/* TITLE */}
                   <h2 className="text-lg font-semibold text-white">{series.title}</h2>
-
-                  {/* DESCRIPTION */}
                   <p className="text-gray-400 text-sm">{series.description}</p>
 
-                  {/* TOGGLE BUTTON */}
                   <button
                     onClick={() => toggleSeries(series._id)}
                     className="w-full bg-red-600 hover:bg-red-700 py-1.5 rounded-xl text-sm"
@@ -119,7 +144,6 @@ const SeriesPage = () => {
                     {openSeries === series._id ? "Hide Episodes" : "Show Episodes"}
                   </button>
 
-                  {/* EPISODES */}
                   {openSeries === series._id && (
                     <div className="space-y-2 mt-3 max-h-60 overflow-y-auto">
                       {series.seasons?.map((season) =>
@@ -133,7 +157,6 @@ const SeriesPage = () => {
                               alt={ep.title}
                               className="w-16 h-12 object-cover rounded-lg"
                             />
-
                             <div className="flex-1">
                               <h3 className="text-sm font-semibold text-white">{ep.title}</h3>
                               <div className="text-xs text-gray-400">

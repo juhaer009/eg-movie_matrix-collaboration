@@ -30,10 +30,15 @@ export default function KidsDetailPage() {
   if (error) return <p className="text-red-500 text-center py-10">{error}</p>;
 
   return (
-    <div className="bg-black min-h-screen p-4">
-      <h1 className="text-white text-3xl font-bold mb-4">{movie.title}</h1>
-      <p className="text-white mb-6">{movie.description}</p>
-
+    <div className="bg-black min-h-screen p-10">
+      <h1 className="text-white text-3xl pt-20 font-bold mb-4">{movie.title}</h1>
+      <p className="text-white  mb-6">{movie.description}</p>
+<button
+        onClick={() => router.back()}
+        className="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
+      >
+        Back
+      </button>
       {movie.video ? (
         <video
           controls
@@ -44,12 +49,7 @@ export default function KidsDetailPage() {
         <p className="text-white">No video available</p>
       )}
 
-      <button
-        onClick={() => router.back()}
-        className="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
-      >
-        Back
-      </button>
+      
     </div>
   );
 }
